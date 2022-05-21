@@ -1,0 +1,19 @@
+Model: RESNET 50
+number of images for training:  60000
+number of images for testing:  10000
+Epoch: 0 | training Loss: 0.6914 | Acc: 0.7566
+Epoch: 1 | training Loss: 0.3187 | Acc: 0.8848
+Epoch: 2 | training Loss: 0.2156 | Acc: 0.9249
+Epoch: 3 | training Loss: 0.1382 | Acc: 0.9563     
+Epoch: 4 | training Loss: 0.0788 | Acc: 0.9793
+Epoch: 5 | training Loss: 0.0409 | Acc: 0.9919
+Epoch: 6 | training Loss: 0.0170 | Acc: 0.9982
+Epoch: 7 | training Loss: 0.0123 | Acc: 0.9983
+Epoch: 8 | training Loss: 0.0054 | Acc: 0.9998
+Epoch: 9 | training Loss: 0.0028 | Acc: 0.9999
+Epoch: 10 | training Loss: 0.0018 | Acc: 1.0000
+Epoch: 11 | training Loss: 0.0013 | Acc: 1.0000
+Epoch: 12 | training Loss: 0.0011 | Acc: 1.0000
+Epoch: 13 | training Loss: 0.0009 | Acc: 1.0000
+Epoch: 14 | training Loss: 0.0008 | Acc: 1.0000
+Accuracy of the network on the 10000 test dataset: 88.12999725341797 %
