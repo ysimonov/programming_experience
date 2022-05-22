@@ -147,10 +147,10 @@ if __name__ == '__main__':
         device=device,
         num_epochs=Configuration.num_epochs,
         train_dataloader=train_dataloader,
-        save_dir='./fashion_mnist.pth'
+        save_dir=r'C:\Users\simon\Documents\Code\programming_experience\neural_networks\resnet\fashion_mnist.pth'
     )
 
     test(
         test_dataloader=test_dataloader,
-        load_dir='./fashion_mnist.pth'
+        load_dir=r'C:\Users\simon\Documents\Code\programming_experience\neural_networks\resnet\fashion_mnist.pth'
     )
