@@ -137,3 +137,6 @@ receipt_dataset/
 
 # pytorch models
 *.pth
+
+# c++ executables
+*.exe
