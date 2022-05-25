@@ -60,9 +60,11 @@ double levenshtein_ratio(std::string str1, std::string str2) {
         dist[i][0] = i;
     }
 
+    for (j=1; j<Np; j++)
+        dist[0][j] = j;
+
     for (j=1; j<Np; j++) {
         jm = j - 1;
-        dist[0][j] = j;
         for (i=1; i<Mp; i++) {
             im = i - 1;
             if (str1_lower[im] == str2_lower[jm]) {
