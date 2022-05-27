@@ -140,3 +140,6 @@ receipt_dataset/
 
 # c++ executables
 *.exe
+*.stackdump
+
+TrOCR/
