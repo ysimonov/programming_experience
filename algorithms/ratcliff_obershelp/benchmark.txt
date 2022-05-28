@@ -1,0 +1,10 @@
+Benchmark results for gestalt_fast.cpp:
+CPU: intel core i7 (12th gen) - 12700H
+
+string 1 = Good Morning Dear Sir How Are you?
+string 2 = good morning dear sir how are you?
+1 million iterations: 14.6935s
+
+string 1 = Good Morning Dear Sir
+string 2 = good morning dear sir
+1 million iterations: 6.72871s
