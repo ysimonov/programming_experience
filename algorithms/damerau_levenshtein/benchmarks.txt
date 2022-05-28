@@ -1,0 +1,4 @@
+Iterations = 1,000,000
+Enter first string: Good morning how are you today?
+Enter second string: good morning how are you today?
+57.7615s
