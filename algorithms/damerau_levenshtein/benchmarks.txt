@@ -1,3 +1,6 @@
+Benchmark results for dlev.cpp:
+CPU: intel core i7 (12th gen) - 12700H
+
 Iterations = 1,000,000
 Enter first string: Good morning how are you today?
 Enter second string: good morning how are you today?
