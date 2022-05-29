@@ -7,6 +7,7 @@
 #include <tuple>
 #include <array>
 #include <chrono>
+#include <sstream>
 
 /*
     AUTHOR: Yevgeniy Simonov, 2022
@@ -159,10 +160,11 @@ double SimilarityRatio(std::string str1, std::string str2) {
 
 int main() {
 
-    int num_times_to_run = 1e6;
+    int num_times_to_run = 1;
 
     std::string str1, str2;
     size_t str1_len, str2_len;
+    std::string num_runs;
 
     int longest_common_substring_len;
     std::string substring_string;
@@ -174,11 +176,17 @@ int main() {
     std::cout << "Enter second string: ";
     std::getline(std::cin, str2);
 
+    std::cout << "Enter number of times to run: ";
+    std::getline(std::cin, num_runs);
+    std::stringstream num_runs_ss(num_runs);
+    num_runs_ss >> num_times_to_run;
+
     auto begin = std::chrono::high_resolution_clock::now();
     for (int i=0; i<num_times_to_run; i++) {
         similarity_ratio = SimilarityRatio(str1, str2);
     }
     auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Similarity ratio: " << similarity_ratio << std::endl;
     std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count())/(1e9) << "s" << std::endl;
 
     return EXIT_SUCCESS;

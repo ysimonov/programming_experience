@@ -8,3 +8,18 @@ string 2 = good morning dear sir how are you?
 string 1 = Good Morning Dear Sir
 string 2 = good morning dear sir
 1 million iterations: 6.72871s
+
+
+./gestalt_fast
+Enter first string: What Great occasion Too Good IndeeD
+Enter second string: whaT GreaT occasion too good indeed
+Enter number of times to run: 1000000
+Similarity ratio: 0.8
+14.417s
+
+./gestalt_nonrecursive_fast
+Enter first string: What Great occasion Too Good IndeeD
+Enter second string: whaT GreaT occasion too good indeed
+Enter number of times to run: 1000000
+Similarity Ratio: 0.8
+17.1667s

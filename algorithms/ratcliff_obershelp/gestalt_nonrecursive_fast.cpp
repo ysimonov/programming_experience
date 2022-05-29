@@ -3,10 +3,9 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
-#include <cstring>
-#include <tuple>
 #include <array>
 #include <chrono>
+#include <sstream>
 
 /*
     AUTHOR: Yevgeniy Simonov, 2022
@@ -69,148 +68,95 @@
         No remaining strings. => total length = 7 + 7 + 3 = 17
 */
 
-int GetMatchingLength(std::string str1, std::string str2) {
 
+inline std::array<int, 3> LongestCommonSubstring(std::string str1, std::string str2) {
     size_t len1 = str1.length();
     size_t len2 = str2.length();
     if ((len1 == 0) || (len2 == 0))
-        return 0;
+        return {-1, -1, 0};
 
     size_t M = len1 + 1;
     size_t N = len2 + 1;
-    size_t P = M * N;
-    int i, j, k, im, jm;
-    int left_str1_anchor = len1;
-    int left_str2_anchor = len2;
-    int right_str1_anchor = 0;
-    int right_str2_anchor = 0;
-    int right_str1_anchor_tmp = 0;
-    int right_str2_anchor_tmp = 0;
+    int i, j, im, jm;
+    int right_str1_anchor = -1;
+    int right_str2_anchor = -1;
+    int len_anchor = 0;
+    int * dist = nullptr;
+    int P = M * N;
+    int temp;
+    dist = new int[P];
+    for (i=0; i<P; i++) {
+        dist[i] = 0;
+    }
+    for (j=1; j<N; j++) {
+        jm = j - 1;
+        for (i=1; i<M; i++) {
+            im = i - 1;
+            if (str1[im] == str2[jm]) {
+                temp = dist[im*N+jm] + 1;
+                dist[i*N+j] = temp;
+                if (len_anchor < temp) {
+                    len_anchor = temp;
+                    right_str1_anchor = i;
+                    right_str2_anchor = j;
+                }
+            }
+        }
+    }
+    delete[] dist;
+    dist = nullptr;
+    return {right_str1_anchor, right_str2_anchor, len_anchor};
+}
+
+int GetMatchingLength(std::string str1, std::string str2) {
+    if ((str1.length() == 0) || (str2.length() == 0))
+        return 0;
+
     int match_len = 0;
     int match_len_prev = 0;
-    int substr_len = 0;
-    int * dist = nullptr;
-    int temp;
-
     std::string str1_tmp, str2_tmp;
+    std::vector<std::pair<std::string, std::string>>::iterator it;
+    std::vector<std::pair<std::string, std::string>> str_nodes, str_nodes_tmp;
+    std::pair<std::string, std::string> node;
+    std::array<int, 3> result;
+    int right_str1_anchor;
+    int right_str2_anchor;
+    int left_str1_anchor;
+    int left_str2_anchor;
+    int len_anchor;
 
+    str_nodes.push_back(std::make_pair(str1, str2));
     do {
         match_len_prev = match_len;
-
-        // Left Anchor
-        if ((left_str1_anchor > 0) && (left_str2_anchor > 0)) {
-
-            str1_tmp = str1.substr(0, left_str1_anchor);
-            str2_tmp = str2.substr(0, left_str2_anchor);
-            len1 = str1_tmp.length();
-            len2 = str2_tmp.length();
-
-            if ((len1 != 0) || (len2 != 0)) {
-
-                // ***** START OF THE SUBSTRING SEARCHING BLOCK *****
-
-                substr_len = 0;
-                M = len1 + 1;
-                N = len2 + 1;
-                P = M * N;
-
-                dist = new int[P];
-                for (i=0; i<P; i++)
-                    dist[i] = 0;
-                
-                for (i=1; i<M; i++) {
-                    im = i - 1;
-                    for (j=1; j<N; j++) {
-                        jm = j - 1;
-                        if (str1_tmp[im] == str2_tmp[jm]) {
-                            temp = dist[im*N+jm] + 1;
-                            dist[i*N+j] = temp;
-                            if (substr_len < temp) {
-                                substr_len = temp;
-                                right_str1_anchor_tmp = i;
-                                right_str2_anchor_tmp = j;
-                            }
-                        }
-                    }
-                }
-
-                delete[] dist;
-                dist = nullptr;
-
-                // ***** END OF SUBSTRING MATCHING BLOCK *****
-
-                if (substr_len > 0) {
-                    right_str1_anchor = right_str1_anchor_tmp;
-                    right_str2_anchor = right_str2_anchor_tmp;
-                    left_str1_anchor = right_str1_anchor - substr_len;
-                    left_str2_anchor = right_str2_anchor - substr_len;    
-                    str1 = str1_tmp;
-                    str2 = str2_tmp;
-                    match_len += substr_len;
-                }
+        // clean old temporary container
+        str_nodes_tmp.clear();
+        // loop over every pair of strings
+        for (it = str_nodes.begin(); it != str_nodes.end(); ++it) {
+            node = *it;
+            str1_tmp = std::get<0>(node);
+            str2_tmp = std::get<1>(node);
+            result = LongestCommonSubstring(str1_tmp, str2_tmp);
+            right_str1_anchor = result[0];
+            right_str2_anchor = result[1];
+            len_anchor = result[2];
+            left_str1_anchor = right_str1_anchor - len_anchor;
+            left_str2_anchor = right_str2_anchor - len_anchor;
+            if (len_anchor != 0) {
+                // increment length of the matching sequence
+                match_len += len_anchor;
+                if ((left_str1_anchor > 0) && (left_str2_anchor > 0))
+                    str_nodes_tmp.push_back(std::make_pair(
+                        str1_tmp.substr(0, left_str1_anchor), str2_tmp.substr(0, left_str2_anchor)));
+                if ((right_str1_anchor < str1_tmp.length()) && (right_str2_anchor < str2_tmp.length()))
+                    str_nodes_tmp.push_back(std::make_pair(
+                        str1_tmp.substr(right_str1_anchor), str2_tmp.substr(right_str2_anchor)));
             }
         }
-    
-        // Right Anchor
-        if ((right_str1_anchor < str1.length()) && (right_str2_anchor < str2.length())) {
-
-            str1_tmp = str1.substr(right_str1_anchor);
-            str2_tmp = str2.substr(right_str2_anchor);
-            len1 = str1_tmp.length();
-            len2 = str2_tmp.length();
-
-            if ((len1 != 0) && (len2 != 0)) {
-
-                // ***** START OF THE SUBSTRING SEARCHING BLOCK *****
-
-                substr_len = 0;
-                M = len1 + 1;
-                N = len2 + 1;
-                P = M * N;
-
-                dist = new int[P];
-                for (i=0; i<P; i++)
-                    dist[i] = 0;
-                
-                for (i=1; i<M; i++) {
-                    im = i - 1;
-                    for (j=1; j<N; j++) {
-                        jm = j - 1;
-                        if (str1_tmp[im] == str2_tmp[jm]) {
-                            temp = dist[im*N+jm] + 1;
-                            dist[i*N+j] = temp;
-                            if (substr_len < temp) {
-                                substr_len = temp;
-                                right_str1_anchor_tmp = i;
-                                right_str2_anchor_tmp = j;
-                            }
-                        }
-                    }
-                }
-
-                delete[] dist;
-                dist = nullptr;
-
-                // ***** END OF SUBSTRING MATCHING BLOCK *****
-
-                if (substr_len > 0) {
-                    right_str1_anchor = right_str1_anchor_tmp;
-                    right_str2_anchor = right_str2_anchor_tmp;
-                    left_str1_anchor = right_str1_anchor - substr_len;
-                    left_str2_anchor = right_str2_anchor - substr_len;    
-                    str1 = str1_tmp;
-                    str2 = str2_tmp;
-                    match_len += substr_len;
-                }
-            }
-        }
-    } while (match_len != match_len_prev);
-
-    if (dist != nullptr) {
-        delete[] dist;
-        dist = nullptr;
-    }
-
+        // copy values from temporary container into main container
+        str_nodes.clear();
+        for (it = str_nodes_tmp.begin(); it != str_nodes_tmp.end(); ++it)
+            str_nodes.push_back(*it);
+    } while (match_len_prev != match_len);
     return match_len;
 }
 
@@ -232,6 +178,7 @@ int main() {
 
     std::string str1, str2;
     size_t str1_len, str2_len;
+    std::string num_runs;
 
     int longest_common_substring_len;
     std::string substring_string;
@@ -243,12 +190,17 @@ int main() {
     std::cout << "Enter second string: ";
     std::getline(std::cin, str2);
 
+    std::cout << "Enter number of times to run: ";
+    std::getline(std::cin, num_runs);
+    std::stringstream num_runs_ss(num_runs);
+    num_runs_ss >> num_times_to_run;
+
     auto begin = std::chrono::high_resolution_clock::now();
     for (int i=0; i<num_times_to_run; i++) {
         similarity_ratio = SimilarityRatio(str1, str2);
-        std::cout << "Similarity Ratio: " << similarity_ratio << std::endl;
     }
     auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Similarity Ratio: " << similarity_ratio << std::endl;
     std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count())/(1e9) << "s" << std::endl;
 
     return EXIT_SUCCESS;
