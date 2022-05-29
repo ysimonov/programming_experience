@@ -9,7 +9,7 @@ My portfolio, showing various projects I have completed, and highlighting my cor
 2. [Complete] **Damerau-Levenshtein** (string similarity): [link](https://github.com/ysimonov/programming_experience/tree/main/algorithms/damerau_levenshtein)
 3. [Complete] **Levenshtein** (with Python integration): [link](https://github.com/ysimonov/programming_experience/tree/main/algorithms/levenshtein)
 4. [Complete] **Longest common subsequence** (fuzzy similarity): [link](https://github.com/ysimonov/programming_experience/tree/main/algorithms/longest_common_subsequence)
-5. [Complete] **Longest common substring** (string within a substring similarity): [link](https://github.com/ysimonov/programming_experience/tree/main/algorithms/longest_common_substring)
+5. [Complete] **Longest common substring** (substring within a string similarity): [link](https://github.com/ysimonov/programming_experience/tree/main/algorithms/longest_common_substring)
 
 ### Deep learning projects:
 1. [Complete] **Resnet 50 / 101 / 152** (classifying Fashion MNIST): [link](https://github.com/ysimonov/programming_experience/tree/main/neural_networks/resnet)
