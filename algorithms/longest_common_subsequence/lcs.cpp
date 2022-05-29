@@ -46,9 +46,11 @@ LongestCommonSubsequence::LongestCommonSubsequence(std::string str1, std::string
 }
 
 LongestCommonSubsequence::~LongestCommonSubsequence() {
-    for(int i=0; i<length1; i++)
-        dist[i].reset();
-    dist.reset();
+    if (dist != nullptr) {
+        for(int i=0; i<length1; i++)
+            dist[i].reset();
+        dist.reset();
+    }
 }
 
 int LongestCommonSubsequence::GetSubsequenceLength() {
