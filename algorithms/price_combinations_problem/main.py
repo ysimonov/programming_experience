@@ -36,7 +36,7 @@ def price_combinations_algorithm():
     t0 = time.perf_counter()
     for combination in get_price_combination(traversal_path):
         total_price_combination = sum(combination)
-        if sum(combination) == total_price:
+        if total_price_combination == total_price:
             print(list(zip(item_keys, combination)), "    ----->    ", total_price_combination)
     t1 = time.perf_counter()
     print("Execution time: ", t1-t0)
