@@ -1,27 +1,17 @@
-import itertools
+import time 
 
 # Problem Statement
 # Suppose you have 10 different products on the receipt
 # Each product can have multiple prices, depending if it is discounted or not
 # Find all possible combinations of prices between products that add up to total price
 
-def get_valid_combination(max_perm, path_lengths):
-    for permutation in itertools.product(range(max_perm), repeat=len(path_lengths)):
-        valid_combination = True
-        for (path_length, list_idx) in zip(path_lengths, permutation):
-            # check if path is valid
-            if list_idx > path_length:
-                valid_combination = False
-                break
-        if valid_combination:
-            yield permutation
-
-def recursive_path_generator(traversal_path, total_price, max_depth, path_lengths):
-    for permutation in get_valid_combination(max_perm=max_depth, path_lengths=path_lengths):
-        traversal_costs = [traversal_path[j][i] for j, i in enumerate(permutation)]
-        traversal_sum = sum(traversal_costs)
-        if traversal_sum == total_price:
-            yield traversal_costs
+def get_price_combination(list_of_items):
+    if not list_of_items:
+        yield ()
+    else:
+        for item_price in list_of_items[0]:
+            for product in get_price_combination(list_of_items[1:]):
+                yield (item_price, ) + product
 
 def price_combinations_algorithm():
 
@@ -40,18 +30,16 @@ def price_combinations_algorithm():
         "Banana Bread": [12, 2, 10]
     }
 
-    traversal_path = list(item_dictionary.values())
-    max_depth = 0
-    path_lengths = []
-    for element_list in traversal_path:
-        len_element_list = len(element_list)
-        path_lengths.append(len_element_list-1)
-        if len_element_list > max_depth:
-            max_depth = len_element_list
+    traversal_path = [list(set(values)) for values in list(item_dictionary.values())]
+    item_keys = list(item_dictionary.keys())
 
-    item_keys = item_dictionary.keys()
-    for valid_price_combination in recursive_path_generator(traversal_path, total_price, max_depth, path_lengths):
-        print(list(zip(item_keys, valid_price_combination)), "    ----->    ", sum(valid_price_combination))
+    t0 = time.perf_counter()
+    for combination in get_price_combination(traversal_path):
+        total_price_combination = sum(combination)
+        if sum(combination) == total_price:
+            print(list(zip(item_keys, combination)), "    ----->    ", total_price_combination)
+    t1 = time.perf_counter()
+    print("Execution time: ", t1-t0)
 
 
 if __name__ == "__main__":
