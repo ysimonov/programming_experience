@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <set>
 #include <numeric>
+#include "priceCombinationFinder.hpp"
 
 std::vector<std::vector<int>> getUniquePrices(std::vector<std::vector<int>> item_prices) {
     std::vector<std::vector<int>> unique_item_prices;
