@@ -108,14 +108,14 @@ int main() {
 
     // print first 5 price combinations
     int i = 0;
-    std::cout << "Printing first 10 valid combinations: " << std::endl;
+    std::cout << "Printing first 5 valid combinations: " << "\n\n";
     for(auto price_combination: price_combinations) {
         for (int i=0; i<price_combination.size(); i++) {
             std::cout << item_names[i] << ": " << price_combination[i] << std::endl;
         }
         std::cout << std::endl;
         i += 1;
-        if (i == 11)
+        if (i == 5)
             break;
     }
 
