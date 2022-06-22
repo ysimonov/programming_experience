@@ -6,7 +6,6 @@ except ImportError:
     from distutils.extension import Extension
 
 from Cython.Build import cythonize
-from matplotlib.pyplot import annotate
 
 # build:
 # python3 setup.py build_ext --inplace
@@ -17,8 +16,8 @@ setup(
     ext_modules=cythonize(
         Extension(
             name="price_combination_finder",
-            sources=["price_combination_finder.pyx", "priceCombinationFinder.cpp"],
-            extra_compile_args=["-std=c++11"]
+            sources=["price_combination_finder.pyx"],
+            extra_compile_args=["-O2"]
         ),
         annotate=True,
         compiler_directives={'language_level' : "3"}

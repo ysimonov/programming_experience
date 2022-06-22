@@ -1,0 +1,28 @@
+Cython:
+1 iteration: 0.02s
+10 iterations: 0.2s
+1000 iterations: 20.01s
+10000 iterations: 192.12s
+
+Python:
+1 iteration: 0.19s
+10 iterations: 1.8s
+100 iterations: 3.15s
+1000 iterations: 30.45s
+
+Test List:
+[
+    [3, 7, 5, 8, 1],
+    [4],
+    [2, 4, 5],
+    [10, 9],
+    [1, 20],
+    [3, 7, 6],
+    [4, 6, 13, 25],
+    [1, 5, 10],
+    [6, 8],
+    [22, 35, 20],
+    [12, 2, 10]
+]
+
+CPU: i7-12700H

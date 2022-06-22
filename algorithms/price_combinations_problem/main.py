@@ -34,15 +34,17 @@ def price_combinations_algorithm():
     item_keys = list(item_dictionary.keys())
 
     t0 = time.perf_counter()
-    total_combinations = 0
-    for combination in get_price_combination(traversal_path):
-        total_price_combination = sum(combination)
-        if total_price_combination == total_price:
-            print(list(zip(item_keys, combination)), "    ----->    ", total_price_combination)
-            total_combinations += 1
+    # total_combinations = 0
+    for i in range(10):
+        for combination in get_price_combination(traversal_path):
+            total_price_combination = sum(combination)
+            if total_price_combination == total_price:
+                pass
+                # print(list(zip(item_keys, combination)), "    ----->    ", total_price_combination)
+                # total_combinations += 1
     t1 = time.perf_counter()
     print("Execution time: ", t1-t0)
-    print("Number of combinations: ", total_combinations)
+    # print("Number of combinations: ", total_combinations)
 
 
 if __name__ == "__main__":
