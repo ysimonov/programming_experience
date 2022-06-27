@@ -5,7 +5,7 @@ import cython
 @cython.cdivision(True)
 def get_price_combination(list list_of_items):
     cdef:
-        int item_price
+        Py_ssize_t item_price
         tuple product
     if not list_of_items:
         yield ()
@@ -19,9 +19,9 @@ def get_price_combination(list list_of_items):
 @cython.cdivision(True)
 cpdef generate_price_combinations(list price_list, int total):
     cdef:
-        int price
+        Py_ssize_t price
+        Py_ssize_t total_check
         tuple price_combination
-        int total_check = 0
         list valid_combinations = []
     for price_combination in get_price_combination(price_list):
         total_check = 0

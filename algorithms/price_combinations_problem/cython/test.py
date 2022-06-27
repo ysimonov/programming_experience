@@ -18,8 +18,7 @@ price_list = [
 total = 100
 
 t0 = time.perf_counter()
-for i in range(10):
-    price_combinations = generate_price_combinations(price_list, total)
+price_combinations = generate_price_combinations(price_list, total)
 t1 = time.perf_counter()
 
 print("Number of combinations: ", len(price_combinations))

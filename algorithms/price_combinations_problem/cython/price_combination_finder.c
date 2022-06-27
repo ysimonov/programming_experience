@@ -4,7 +4,7 @@
 {
     "distutils": {
         "extra_compile_args": [
-            "-O3"
+            "-O2"
         ],
         "name": "price_combination_finder",
         "sources": [
@@ -917,18 +917,18 @@ struct __pyx_obj_24price_combination_finder___pyx_scope_struct__get_price_combin
  * @cython.cdivision(True)
  * def get_price_combination(list list_of_items):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int item_price
+ *         Py_ssize_t item_price
  */
 struct __pyx_obj_24price_combination_finder___pyx_scope_struct__get_price_combination {
   PyObject_HEAD
-  int __pyx_v_item_price;
+  Py_ssize_t __pyx_v_item_price;
   PyObject *__pyx_v_list_of_items;
   PyObject *__pyx_v_product;
   PyObject *__pyx_t_0;
   Py_ssize_t __pyx_t_1;
   PyObject *(*__pyx_t_2)(PyObject *);
-  PyObject *__pyx_t_3;
-  Py_ssize_t __pyx_t_4;
+  Py_ssize_t __pyx_t_3;
+  PyObject *__pyx_t_4;
   PyObject *(*__pyx_t_5)(PyObject *);
 };
 
@@ -1231,9 +1231,6 @@ static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
-
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
@@ -1424,7 +1421,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
  * @cython.cdivision(True)
  * def get_price_combination(list list_of_items):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int item_price
+ *         Py_ssize_t item_price
  */
 
 /* Python wrapper */
@@ -1495,12 +1492,11 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
   Py_ssize_t __pyx_t_4;
   PyObject *(*__pyx_t_5)(PyObject *);
   PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
+  Py_ssize_t __pyx_t_7;
   PyObject *__pyx_t_8 = NULL;
   PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
-  Py_ssize_t __pyx_t_11;
-  PyObject *(*__pyx_t_12)(PyObject *);
+  PyObject *(*__pyx_t_11)(PyObject *);
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1518,7 +1514,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
   if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 6, __pyx_L1_error)
 
   /* "price_combination_finder.pyx":10
- *         int item_price
+ *         Py_ssize_t item_price
  *         tuple product
  *     if not list_of_items:             # <<<<<<<<<<<<<<
  *         yield ()
@@ -1547,7 +1543,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
     if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 11, __pyx_L1_error)
 
     /* "price_combination_finder.pyx":10
- *         int item_price
+ *         Py_ssize_t item_price
  *         tuple product
  *     if not list_of_items:             # <<<<<<<<<<<<<<
  *         yield ()
@@ -1607,7 +1603,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
         }
         __Pyx_GOTREF(__pyx_t_6);
       }
-      __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 13, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_6); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 13, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_cur_scope->__pyx_v_item_price = __pyx_t_7;
 
@@ -1643,35 +1639,35 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
-        __pyx_t_8 = __pyx_t_6; __Pyx_INCREF(__pyx_t_8); __pyx_t_11 = 0;
-        __pyx_t_12 = NULL;
+        __pyx_t_8 = __pyx_t_6; __Pyx_INCREF(__pyx_t_8); __pyx_t_7 = 0;
+        __pyx_t_11 = NULL;
       } else {
-        __pyx_t_11 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 14, __pyx_L1_error)
+        __pyx_t_7 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 14, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_12 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 14, __pyx_L1_error)
+        __pyx_t_11 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 14, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       for (;;) {
-        if (likely(!__pyx_t_12)) {
+        if (likely(!__pyx_t_11)) {
           if (likely(PyList_CheckExact(__pyx_t_8))) {
-            if (__pyx_t_11 >= PyList_GET_SIZE(__pyx_t_8)) break;
+            if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_8)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_6 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_11); __Pyx_INCREF(__pyx_t_6); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 14, __pyx_L1_error)
+            __pyx_t_6 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_7); __Pyx_INCREF(__pyx_t_6); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 14, __pyx_L1_error)
             #else
-            __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 14, __pyx_L1_error)
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 14, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
             #endif
           } else {
-            if (__pyx_t_11 >= PyTuple_GET_SIZE(__pyx_t_8)) break;
+            if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_8)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_11); __Pyx_INCREF(__pyx_t_6); __pyx_t_11++; if (unlikely(0 < 0)) __PYX_ERR(0, 14, __pyx_L1_error)
+            __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_7); __Pyx_INCREF(__pyx_t_6); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 14, __pyx_L1_error)
             #else
-            __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_11); __pyx_t_11++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 14, __pyx_L1_error)
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_8, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 14, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_6);
             #endif
           }
         } else {
-          __pyx_t_6 = __pyx_t_12(__pyx_t_8);
+          __pyx_t_6 = __pyx_t_11(__pyx_t_8);
           if (unlikely(!__pyx_t_6)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
@@ -1695,7 +1691,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
  * 
  * @cython.wraparound(False)
  */
-        __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_cur_scope->__pyx_v_item_price); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 15, __pyx_L1_error)
+        __pyx_t_6 = PyInt_FromSsize_t(__pyx_cur_scope->__pyx_v_item_price); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 15, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 15, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
@@ -1711,10 +1707,10 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
         __pyx_cur_scope->__pyx_t_0 = __pyx_t_3;
         __pyx_cur_scope->__pyx_t_1 = __pyx_t_4;
         __pyx_cur_scope->__pyx_t_2 = __pyx_t_5;
+        __pyx_cur_scope->__pyx_t_3 = __pyx_t_7;
         __Pyx_XGIVEREF(__pyx_t_8);
-        __pyx_cur_scope->__pyx_t_3 = __pyx_t_8;
-        __pyx_cur_scope->__pyx_t_4 = __pyx_t_11;
-        __pyx_cur_scope->__pyx_t_5 = __pyx_t_12;
+        __pyx_cur_scope->__pyx_t_4 = __pyx_t_8;
+        __pyx_cur_scope->__pyx_t_5 = __pyx_t_11;
         __Pyx_XGIVEREF(__pyx_r);
         __Pyx_RefNannyFinishContext();
         __Pyx_Coroutine_ResetAndClearException(__pyx_generator);
@@ -1727,11 +1723,11 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
         __Pyx_XGOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_cur_scope->__pyx_t_1;
         __pyx_t_5 = __pyx_cur_scope->__pyx_t_2;
-        __pyx_t_8 = __pyx_cur_scope->__pyx_t_3;
-        __pyx_cur_scope->__pyx_t_3 = 0;
+        __pyx_t_7 = __pyx_cur_scope->__pyx_t_3;
+        __pyx_t_8 = __pyx_cur_scope->__pyx_t_4;
+        __pyx_cur_scope->__pyx_t_4 = 0;
         __Pyx_XGOTREF(__pyx_t_8);
-        __pyx_t_11 = __pyx_cur_scope->__pyx_t_4;
-        __pyx_t_12 = __pyx_cur_scope->__pyx_t_5;
+        __pyx_t_11 = __pyx_cur_scope->__pyx_t_5;
         if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 15, __pyx_L1_error)
 
         /* "price_combination_finder.pyx":14
@@ -1762,7 +1758,7 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
  * @cython.cdivision(True)
  * def get_price_combination(list list_of_items):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int item_price
+ *         Py_ssize_t item_price
  */
 
   /* function exit code */
@@ -1791,14 +1787,14 @@ static PyObject *__pyx_gb_24price_combination_finder_2generator(__pyx_CoroutineO
  * @cython.cdivision(True)
  * cpdef generate_price_combinations(list price_list, int total):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int price
+ *         Py_ssize_t price
  */
 
 static PyObject *__pyx_pw_24price_combination_finder_4generate_price_combinations(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(PyObject *__pyx_v_price_list, int __pyx_v_total, CYTHON_UNUSED int __pyx_skip_dispatch) {
-  int __pyx_v_price;
+  Py_ssize_t __pyx_v_price;
+  Py_ssize_t __pyx_v_total_check;
   PyObject *__pyx_v_price_combination = 0;
-  int __pyx_v_total_check;
   PyObject *__pyx_v_valid_combinations = 0;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -1808,7 +1804,7 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
   Py_ssize_t __pyx_t_4;
   PyObject *(*__pyx_t_5)(PyObject *);
   Py_ssize_t __pyx_t_6;
-  int __pyx_t_7;
+  Py_ssize_t __pyx_t_7;
   int __pyx_t_8;
   int __pyx_t_9;
   int __pyx_lineno = 0;
@@ -1816,18 +1812,9 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("generate_price_combinations", 0);
 
-  /* "price_combination_finder.pyx":24
- *         int price
- *         tuple price_combination
- *         int total_check = 0             # <<<<<<<<<<<<<<
- *         list valid_combinations = []
- *     for price_combination in get_price_combination(price_list):
- */
-  __pyx_v_total_check = 0;
-
   /* "price_combination_finder.pyx":25
+ *         Py_ssize_t total_check
  *         tuple price_combination
- *         int total_check = 0
  *         list valid_combinations = []             # <<<<<<<<<<<<<<
  *     for price_combination in get_price_combination(price_list):
  *         total_check = 0
@@ -1838,7 +1825,7 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
   __pyx_t_1 = 0;
 
   /* "price_combination_finder.pyx":26
- *         int total_check = 0
+ *         tuple price_combination
  *         list valid_combinations = []
  *     for price_combination in get_price_combination(price_list):             # <<<<<<<<<<<<<<
  *         total_check = 0
@@ -1934,7 +1921,7 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
       __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       #endif
-      __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_3); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_price = __pyx_t_7;
 
@@ -1985,7 +1972,7 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
     }
 
     /* "price_combination_finder.pyx":26
- *         int total_check = 0
+ *         tuple price_combination
  *         list valid_combinations = []
  *     for price_combination in get_price_combination(price_list):             # <<<<<<<<<<<<<<
  *         total_check = 0
@@ -2009,7 +1996,7 @@ static PyObject *__pyx_f_24price_combination_finder_generate_price_combinations(
  * @cython.cdivision(True)
  * cpdef generate_price_combinations(list price_list, int total):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int price
+ *         Py_ssize_t price
  */
 
   /* function exit code */
@@ -2145,7 +2132,7 @@ static void __pyx_tp_dealloc_24price_combination_finder___pyx_scope_struct__get_
   Py_CLEAR(p->__pyx_v_list_of_items);
   Py_CLEAR(p->__pyx_v_product);
   Py_CLEAR(p->__pyx_t_0);
-  Py_CLEAR(p->__pyx_t_3);
+  Py_CLEAR(p->__pyx_t_4);
   if (CYTHON_COMPILING_IN_CPYTHON && ((__pyx_freecount_24price_combination_finder___pyx_scope_struct__get_price_combination < 8) & (Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_24price_combination_finder___pyx_scope_struct__get_price_combination)))) {
     __pyx_freelist_24price_combination_finder___pyx_scope_struct__get_price_combination[__pyx_freecount_24price_combination_finder___pyx_scope_struct__get_price_combination++] = ((struct __pyx_obj_24price_combination_finder___pyx_scope_struct__get_price_combination *)o);
   } else {
@@ -2165,8 +2152,8 @@ static int __pyx_tp_traverse_24price_combination_finder___pyx_scope_struct__get_
   if (p->__pyx_t_0) {
     e = (*v)(p->__pyx_t_0, a); if (e) return e;
   }
-  if (p->__pyx_t_3) {
-    e = (*v)(p->__pyx_t_3, a); if (e) return e;
+  if (p->__pyx_t_4) {
+    e = (*v)(p->__pyx_t_4, a); if (e) return e;
   }
   return 0;
 }
@@ -2321,7 +2308,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * @cython.cdivision(True)
  * def get_price_combination(list list_of_items):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int item_price
+ *         Py_ssize_t item_price
  */
   __pyx_tuple__2 = PyTuple_Pack(3, __pyx_n_s_list_of_items, __pyx_n_s_item_price, __pyx_n_s_product); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
@@ -2624,7 +2611,7 @@ if (!__Pyx_RefNanny) {
  * @cython.cdivision(True)
  * def get_price_combination(list list_of_items):             # <<<<<<<<<<<<<<
  *     cdef:
- *         int item_price
+ *         Py_ssize_t item_price
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_24price_combination_finder_1get_price_combination, NULL, __pyx_n_s_price_combination_finder); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -3774,44 +3761,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(long),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const int neg_one = (int) -1, const_zero = (int) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
                                      little, !is_unsigned);
     }
 }
