@@ -1,19 +1,13 @@
-PACKAGENAME=Cython
-PYTHON?=python3
+CC = g++
+CFLAGS = -g -Wall -std=c++11 -O2
 
-# to build all cython files, run: make cython-build
+TARGETS = main.cpp priceCombinationFinder.cpp
 
-dir := .
+all: main.o
+	$(CC) $(CFLAGS) -o main.o main
 
-# rm -f $(addsuffix /*.cpp,$(dir))
-# rm -f $(addsuffix /*.c,$(dir))
-# rm -f $(addsuffix /*.html,$(dir))
+main.o:	priceCombinationFinder.hpp main.cpp
+	$(CC) $(CFLAGS) -c main.cpp
 
-clean-all:
-	rm -f $(addsuffix /*.so,$(dir))
-	rm -f $(addsuffix /*.pyd,$(dir))
-	rm -f $(addsuffix /*.py[co],$(dir))
-
-.PHONY: cython-build
-cython-build: clean-all
-	${PYTHON} $(addsuffix /setup.py,$(dir)) build_ext --build-lib $(addsuffix /,$(dir))
+clean:
+	$(RM) main
