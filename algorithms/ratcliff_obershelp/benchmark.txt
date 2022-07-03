@@ -13,13 +13,23 @@ string 2 = good morning dear sir
 ./gestalt_fast
 Enter first string: What Great occasion Too Good IndeeD
 Enter second string: whaT GreaT occasion too good indeed
-Enter number of times to run: 1000000
+Enter number of times to run: 1_000_000
 Similarity ratio: 0.8
 14.417s
 
 ./gestalt_nonrecursive_fast
 Enter first string: What Great occasion Too Good IndeeD
 Enter second string: whaT GreaT occasion too good indeed
-Enter number of times to run: 1000000
+Enter number of times to run: 1_000_000
 Similarity Ratio: 0.8
 17.1667s
+
+
+With compile flag -O3 (Clang-14):
+
+./gestalt_nonrecursive_fast
+Enter first string: Good morning sir
+Enter second string: good Morning SiR
+Enter number of times to run: 100_000_000
+Similarity ratio: 0.75
+47.0072s

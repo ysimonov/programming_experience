@@ -9,6 +9,8 @@
 using namespace std;
 using namespace boost::coroutines2;
 
+// compile: g++ priceCombinationFinder.cpp -o main -lboost_program_options-mt
+
 template<typename T>
 vector<T> slice(vector<T> &v, int m, int n)
 {
@@ -38,6 +40,7 @@ void generateCombination(coro_t::push_type& yield, vector<vector<int>> listOfIte
 }
 
 list<int> getPriceCombination(vector<vector<int>> listOfItems, int totalPrice) {
+    list<int> validPriceCombination;
     for (auto& priceCombination:
             coro_t::pull_type(
                 fixedsize_stack(),
@@ -48,9 +51,11 @@ list<int> getPriceCombination(vector<vector<int>> listOfItems, int totalPrice) {
             totalCheck = accumulate(priceCombination.begin(), priceCombination.end(), 0);
             if (totalCheck == totalPrice) {
                 cout << "Found price combination" << endl;
-                return priceCombination;
+                validPriceCombination = priceCombination;
+                break;
             }
         }
+    return validPriceCombination;
 }
 
 int main() {
@@ -73,14 +78,14 @@ int main() {
     // get all unique price combinations
     auto begin = std::chrono::high_resolution_clock::now();
 
-    auto priceCombination = getPriceCombination(listOfItems, totalPrice);
+    // auto priceCombination = getPriceCombination(listOfItems, totalPrice);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count())/(1e9) << "s" << std::endl;
    
-    for(auto& price: priceCombination) {
-        std::cout << price << " ";
-    }
+    // for(auto& price: priceCombination) {
+    //     std::cout << price << " ";
+    // }
 
     return EXIT_SUCCESS;
 }
