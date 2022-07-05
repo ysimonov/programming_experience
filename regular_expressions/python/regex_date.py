@@ -1,6 +1,4 @@
-from pickle import UNICODE
 import re
-
 
 def date_parser(text: str) -> str:
     # matches '17/02/2009' and '17/2/2009' and '17/ 2/2009' and ' 2/02/2009'
