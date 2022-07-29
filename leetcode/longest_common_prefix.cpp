@@ -7,15 +7,22 @@ using namespace std;
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
+        auto number_of_strings = strs.size();
+        if (number_of_strings == 1) {
+            return strs[0];
+        } else if (strs[0].length() == 0) {
+            return "";
+        }
         // find the length of the shortest string in the vector
         vector<int> lengths;
         int min_length = INT_MAX;
-        char ch = strs[0].at(0);
+        const string& str0 = strs[0];
+        char ch = str0.at(0);
         // check min length and 
-        auto number_of_strings = strs.size();
-        for (int i = 1; i < number_of_strings; i++) {
-            const string& str = strs[i];
+        for (auto &str: strs) {
             auto strl = str.length();
+            if (strl == 0)
+                return "";
             if (strl < min_length) {
                 min_length = strl;
             }
@@ -23,19 +30,22 @@ public:
                 return "";
             }
         }
+        if (min_length == 1) {
+            return {strs[0].at(0)}; 
+        }
         // since the above part passed, it means that
         // all first characters for all strings are the same
         // so only need to check characters from position 2, until min_length;
         for (int pos = 1; pos < min_length; pos++) {
-            ch = strs[0].at(pos);
+            ch = str0.at(pos);
             for (int i = 1; i < number_of_strings; i++) {
                 const string& str = strs[i];
                 if (str.at(pos) != ch) {
-                    return str.substr(0, pos);
+                    return str0.substr(0, pos);
                 }
             }
         }
-        return strs[0].substr(0, min_length); 
+        return str0.substr(0, min_length); 
     }
 };
 
