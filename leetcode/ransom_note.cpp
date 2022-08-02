@@ -42,22 +42,19 @@ public:
                 dict[ch] = 1; 
             }
         }
-        bool can_construct = true;
         for (char& ch : ransomNote) {
             auto it = dict.find(ch);
             if (it != dict.end()) {
                 if (it->second > 0) {
                     it->second -= 1;
                 } else {
-                    can_construct = false;
-                    break;
+                    return false;
                 }
             } else {
-                can_construct = false;
-                break;
+                return false;
             }
         }
-        return can_construct;
+        return true;
     }
 };
 
