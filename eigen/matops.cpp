@@ -21,6 +21,9 @@ int main() {
     auto sum = a + b;
     auto diff = a - b;
     auto prod = a * b;
+    auto inv = a.inverse();
+    auto pinv = a.completeOrthogonalDecomposition().pseudoInverse();
+    auto diag = b * b.inverse();
 
     std::cout << "Matrix a + b: \n";
     std::cout << sum << "\n\n";
@@ -31,5 +34,14 @@ int main() {
     std::cout << "Matrix a * b: \n";
     std::cout << prod << "\n\n";
     
+    std::cout << "Inverse of matrix a: \n";
+    std::cout << inv << "\n\n";
+
+    std::cout << "Pseudoinverse of matrix a: \n";
+    std::cout << pinv << "\n\n";
+
+    std::cout << "Inverse of matrix b times b: \n";
+    std::cout << diag << "\n\n";
+
     return EXIT_SUCCESS;
 }
