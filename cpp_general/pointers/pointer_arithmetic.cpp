@@ -36,7 +36,7 @@ void SumInputSizedArr1D(int array_ptr[100], int size) {
     println("Sum of array elements using formal parameter as sized array: " << sum);
 }
 
-// Formal parameter as sized array
+// Formal parameter as unsized array
 void SumInputUnsizedArr1D(int array_ptr[], int size) {
     int sum = 0;
     for (int i = 0; i < size; i++) {
@@ -70,7 +70,7 @@ int main() {
     println("address of the first element in number_array_ptr using number_array_ptr: " << number_array_ptr);
     println("address of number_array_ptr[3]: " << &number_array_ptr[3]);
     println("address of the fourth element in number_array_ptr using number_array_ptr + 4: " << number_array_ptr + 3);
-    
+
     SumInputPtr1D(number_array_ptr, size);
     SumInputSizedArr1D(number_array_ptr, size);
     SumInputUnsizedArr1D(number_array_ptr, size);
