@@ -9,6 +9,42 @@ void ModifyValue(int &val) {
     val = 1000;
 }
 
+// Calculate sum by passing an address and access using a pointer as input argument
+void Sum(int* array_ptr, int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += array_ptr[i];
+    }
+    println("Sum of array elements using pointer to an array: " << sum);
+}
+
+// Calculate sum by passing an address and access using a pointer as input argument
+void SumInputPtr1D(int* array_ptr, int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += array_ptr[i];
+    }
+    println("Sum of array elements using pointer to an array: " << sum);
+}
+
+// Formal parameter as sized array
+void SumInputSizedArr1D(int array_ptr[100], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += array_ptr[i];
+    }
+    println("Sum of array elements using formal parameter as sized array: " << sum);
+}
+
+// Formal parameter as sized array
+void SumInputUnsizedArr1D(int array_ptr[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += array_ptr[i];
+    }
+    println("Sum of array elements using formal parameter as sized array: " << sum);
+}
+
 int main() {
 
     // *** Example Single Element ***
@@ -29,6 +65,15 @@ int main() {
     int* number_array_ptr = new int[size];
     for (int i = 0; i < size; i++)
         number_array_ptr[i] = i;
+
+    println("\naddress of number_array_ptr[0]: " << &number_array_ptr[0]);
+    println("address of the first element in number_array_ptr using number_array_ptr: " << number_array_ptr);
+    println("address of number_array_ptr[3]: " << &number_array_ptr[3]);
+    println("address of the fourth element in number_array_ptr using number_array_ptr + 4: " << number_array_ptr + 3);
+    
+    SumInputPtr1D(number_array_ptr, size);
+    SumInputSizedArr1D(number_array_ptr, size);
+    SumInputUnsizedArr1D(number_array_ptr, size);
 
     delete[] number_array_ptr;
     number_array_ptr = nullptr;
