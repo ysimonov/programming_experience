@@ -14,6 +14,7 @@ class ImageProcessor {
         cv::Mat original_image;
         cv::Mat rescaled_image;
         cv::Mat grey_scale_image;
+        cv::Mat contour_image;
 
         ImageProcessor() 
         {};
@@ -26,6 +27,7 @@ class ImageProcessor {
         void RescaleImage(cv::Mat& input_imag, int scale_percent, int interpolation);
         void CreateGreyScaleImage(cv::Mat& input_imag);
         void DisplayImage(cv::Mat& input_imag, std::string title);
+        void FindImageContours(cv::Mat& input_imag);
 };  
 
 /*
@@ -109,6 +111,35 @@ void ImageProcessor::DisplayImage(cv::Mat& input_image, std::string title = "Ima
     cv::destroyWindow(title);
 }
 
+/*
+ * Applies contours on the input image
+ */
+void ImageProcessor::FindImageContours(cv::Mat& input_imag) {
+
+    // convert RGB to Grey Scale
+    if (input_imag.channels() > 1) {
+        this->CreateGreyScaleImage(input_imag);
+    }
+    
+    // apply binary thresholding
+    cv::Mat thresholded;
+    cv::threshold(grey_scale_image, thresholded, 230, 255, cv::THRESH_OTSU);
+
+    // detect contours on binary image
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(thresholded, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_NONE);
+
+    // draw contours on the copy of the original image
+    if (input_imag.cols == original_image.cols) {
+        contour_image = original_image.clone();
+    } else {
+        contour_image = rescaled_image.clone();
+    }
+    cv::drawContours(contour_image, contours, -1, cv::Scalar(0, 255, 0), 2);
+
+}
+
 
 int main() {
     
@@ -122,6 +153,8 @@ int main() {
     image_processor.RescaleImage(image_processor.original_image, 50);
     image_processor.CreateGreyScaleImage(image_processor.rescaled_image);
     image_processor.DisplayImage(image_processor.grey_scale_image, "Grey Image");
+    image_processor.FindImageContours(image_processor.original_image);
+    image_processor.DisplayImage(image_processor.contour_image, "Image with contours");
 
     return EXIT_SUCCESS;
 }
