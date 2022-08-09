@@ -71,7 +71,7 @@ void ImageProcessor::RescaleImage(
     int width = input_image.cols;
     int height = input_image.rows;
 
-    std::cout << "Height: " << height << " Width: " << width << std::endl;
+    // std::cout << "Height: " << height << " Width: " << width << std::endl;
 
     // find new image dimensions
     double scale_factor = scale_percent / 100.0;
@@ -118,33 +118,10 @@ int main() {
     std::cout << "Please specify image path: ";
     std::cin >> image_path;
 
-    try {
-        image_processor.ReadImage(image_path);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+    image_processor.ReadImage(image_path);
+    image_processor.RescaleImage(image_processor.original_image, 50);
+    image_processor.CreateGreyScaleImage(image_processor.rescaled_image);
+    image_processor.DisplayImage(image_processor.grey_scale_image, "Grey Image");
 
-    try {
-        image_processor.RescaleImage(image_processor.original_image, 50);
-    } catch (cv::Exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE; 
-    }
-    
-    try {
-        image_processor.CreateGreyScaleImage(image_processor.rescaled_image);
-    } catch (cv::Exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE; 
-    }
-
-    try {
-        image_processor.DisplayImage(image_processor.grey_scale_image, "Grey Image");
-    } catch (cv::Exception& e) {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE; 
-    }
-    
     return EXIT_SUCCESS;
 }
