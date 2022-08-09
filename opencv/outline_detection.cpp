@@ -44,8 +44,8 @@ void ImageProcessor::ReadImage(std::string image_path) {
     // remove double or single quote if included in path
     image_path_norm = std::regex_replace(
         image_path_norm,
-		std::regex(R"([\"'])"),
-		R"()"
+        std::regex(R"([\"'])"),
+        R"()"
     );
 
     original_image = cv::imread(image_path_norm);
