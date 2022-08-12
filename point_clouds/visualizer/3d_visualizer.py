@@ -21,15 +21,19 @@ if __name__ == '__main__':
         np.asarray(point_cloud['cartesianZ'])
     )).transpose()
 
+    color_r = np.asarray(point_cloud['colorRed'], dtype=np.float64)
+    color_g = np.asarray(point_cloud['colorGreen'], dtype=np.float64)
+    color_b = np.asarray(point_cloud['colorBlue'], dtype=np.float64)
+
     colors_rgb = np.vstack((
-        np.asarray(point_cloud['colorRed']),
-        np.asarray(point_cloud['colorGreen']),
-        np.asarray(point_cloud['colorBlue'])
+        color_r / 255.,
+        color_g / 255.,
+        color_b / 255.
     )).transpose()
 
     intensities = np.asarray(point_cloud['intensity'])
 
-    step_size = 4
+    step_size = 5
     sampled_points_3d = points_3d[::step_size]
     sampled_colors_rgb = colors_rgb[::step_size]
     sampled_intensities = intensities[::step_size]
@@ -37,5 +41,6 @@ if __name__ == '__main__':
     # pass xyz to Open3D
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(sampled_points_3d)
-    pcd.colors = o3d.utility.Vector3dVector(sampled_colors_rgb)
+    # pcd.colors = o3d.utility.Vector3dVector(sampled_colors_rgb)
     o3d.visualization.draw_geometries([pcd])
+    pcd.clear()

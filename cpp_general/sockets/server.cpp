@@ -10,10 +10,6 @@
 
 #include <unistd.h> // close()
 
-void free_addrmem(addrinfo* ptr_res, addrinfo* ptr_p) {
-    freeaddrinfo(ptr_res);
-    freeaddrinfo(ptr_p);
-}
 
 int main(int argc, char* argv[]) {
 
@@ -26,8 +22,8 @@ int main(int argc, char* argv[]) {
     const static uint64_t num_conn = 8;
 
     addrinfo hints;
-    addrinfo* ptr_res;  // hold
-    addrinfo* ptr_p;    // iterate
+    addrinfo* ptr_res = nullptr;  // hold
+    addrinfo* ptr_p = nullptr;    // iterate
 
     memset(&hints, 0, sizeof(hints));
 
@@ -40,7 +36,7 @@ int main(int argc, char* argv[]) {
     int get_addr = getaddrinfo(nullptr, port_num, &hints, &ptr_res);
     if (get_addr != 0) {
         std::cerr << gai_strerror(get_addr) << std::endl;
-        free_addrmem(ptr_res, ptr_p);
+        freeaddrinfo(ptr_res);
         return -2;
     }
 
@@ -83,7 +79,7 @@ int main(int argc, char* argv[]) {
     // if no addr found
     if (!num_of_addr) {
         std::cout << "Found no valid host address\n";
-        free_addrmem(ptr_res, ptr_p);
+        freeaddrinfo(ptr_res);
         return -3;
     }
 
@@ -106,7 +102,7 @@ int main(int argc, char* argv[]) {
     int sock_fd = socket(ptr_p->ai_family, ptr_p->ai_socktype, ptr_p->ai_protocol);
     if (sock_fd == -1) {
         std::cerr << "Error occured while creating socket!\n";
-        free_addrmem(ptr_res, ptr_p);
+        freeaddrinfo(ptr_res);
         return -4;
     }
 
@@ -115,7 +111,7 @@ int main(int argc, char* argv[]) {
     if (bind_r == -1) {
         std::cerr << "Error while binding socket!\n";
         close(sock_fd); // close socket
-        free_addrmem(ptr_res, ptr_p);
+        freeaddrinfo(ptr_res);
         return -5;
     }
 
@@ -124,7 +120,7 @@ int main(int argc, char* argv[]) {
     if (listen_r == -1) {
         std::cerr << "Error while listening to the socket!\n";
         close(sock_fd); // close socket
-        free_addrmem(ptr_res, ptr_p);
+        freeaddrinfo(ptr_res);
         return -6;   
     }
 
@@ -154,7 +150,7 @@ int main(int argc, char* argv[]) {
     }
 
     close(sock_fd);
-    free_addrmem(ptr_res, ptr_p);
+    freeaddrinfo(ptr_res);
 
     return 0;
 }
