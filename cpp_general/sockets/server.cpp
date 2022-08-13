@@ -10,6 +10,7 @@
 
 #include <unistd.h> // close()
 
+#include <limits>
 
 int main(int argc, char* argv[]) {
 
@@ -88,13 +89,18 @@ int main(int argc, char* argv[]) {
     uint32_t choice = 0;
 
     while (1) {
-        std::cin >> choice;
+        if (!(std::cin >> choice)) {
+            std::cout << "Failed to read!\n";
+            std::cin.clear();
+            // ignore rest of the line
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
         if (choice > (num_of_addr + 1) || choice < 1) {
             std::cout << "Wrong choice, please enter address number again: ";
         } else {
             break;
         }
-    }
+    };
 
     ptr_p = ptr_res;
 
