@@ -4,6 +4,8 @@
 using namespace boost::asio;
 using ip::tcp;
 
+// compile with -pthread flag
+
 int main() {
     boost::asio::io_service io_service;
     // create socket

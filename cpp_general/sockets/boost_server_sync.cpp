@@ -5,6 +5,8 @@
 using namespace boost::asio;
 using ip::tcp;
 
+// compile with -pthread flag
+
 /*
 Server receives messages from the client
 and responds back.
