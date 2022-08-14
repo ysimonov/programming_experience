@@ -6,7 +6,7 @@
 #include <string>
 #include <chrono>
 #include <condition_variable>
-#include <boost/thread/mutex.hpp>
+#include <mutex>
 
 template<typename Data>
 class Queue {
@@ -18,12 +18,12 @@ class Queue {
 
     public:
 
-        // void wait() {
-        //     std::unique_lock<std::mutex> lock(mutex_);
-        //     {
-        //         condition_variable_.wait(lock);
-        //     }
-        // }
+        void wait() {
+            std::unique_lock<std::mutex> lock(mutex_);
+            {
+                condition_variable_.wait(lock);
+            }
+        }
 
         void push(const Data& data) {
             std::unique_lock<std::mutex> lock(mutex_);
