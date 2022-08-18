@@ -52,17 +52,18 @@ void read_and_print(Queue<std::string>& queue) {
 
     std::thread::id thread_id = std::this_thread::get_id();
 
-    auto sleep_duration = std::chrono::seconds(1);
+    auto wait_duration = std::chrono::seconds(1);
 
     while (!stop_flag) {
 
         std::string new_data;
-        auto data_acquired = queue.try_pop(new_data, sleep_duration);
+        auto data_acquired = queue.try_pop(new_data, wait_duration);
 
         if (data_acquired) {
             std::cout << ">> Thread " << thread_id << " received " << new_data << std::endl;
         }
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
