@@ -4,7 +4,7 @@
 #include <vector>
 #include <math.h>
 
-std::array<uint32_t, 0x10000> peq;
+static std::array<uint32_t, 0x10000> peq;
 
 uint32_t myers_32(std::string a, std::string b) 
 {
@@ -45,10 +45,9 @@ uint32_t myers_x(std::string a, std::string b)
     auto vsize = uint32_t(ceil(m / THIRTYTWO));
     std::vector<int> mhc(hsize, 0);
     std::vector<int> phc(hsize, -1);
-    int j = 0;
-    for (; j < vsize - 1; j++) {
-        auto mv {0};
-        auto pv {-1};
+    for (int j = 0; j < vsize - 1; j++) {
+        auto mv = 0;
+        auto pv = -1;
         const auto start = j * THIRTYTWO;
         const auto vlen = std::min(THIRTYTWO, m) + start;
         for (int k = start; k < vlen; k++)
@@ -76,7 +75,7 @@ uint32_t myers_x(std::string a, std::string b)
     }
     auto mv = 0;
     auto pv = -1;
-    const auto start = j * THIRTYTWO;
+    const auto start = (vsize - 2) * THIRTYTWO;
     const auto vlen = std::min(THIRTYTWO, m - start) + start;
     for (int k = start; k < vlen; k++)
         peq[b.at(k)] |= 1 << k;
@@ -89,11 +88,11 @@ uint32_t myers_x(std::string a, std::string b)
         const auto xh = ((((eq | mb) & pv) + pv) ^ pv) | eq | mb;
         auto ph = mv | ~(xh | pv);
         auto mh = pv & xh;
-        score += (uint32_t(ph) >> uint32_t(m - 1)) & 1;
-        score -= (uint32_t(mh) >> uint32_t(m - 1)) & 1;
-        if ((uint32_t(ph) >> uint32_t(31)) ^ pb)
+        score += (ph >> m - 1) & 1;
+        score -= (mh >> m - 1) & 1;
+        if ((ph >> 31) ^ pb)
             phc[(i / THIRTYTWO) | 0] ^= 1 << i;
-        if ((uint32_t(mh) >> uint32_t(31)) ^ mb)
+        if ((mh >> 31) ^ mb)
             mhc[(i / THIRTYTWO) | 0] ^= 1 << i;
         ph = (ph << 1) | pb;
         mh = (mh << 1) | mb;

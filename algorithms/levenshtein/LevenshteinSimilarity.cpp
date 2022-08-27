@@ -81,6 +81,9 @@ double levenshtein_ratio(std::string str1, std::string str2) {
     }
 
     levdist = dist[M][N];
+
+    // std::cout << "Levdist: " << levdist << std::endl;
+
     string_ratio = double(lensum - levdist) / lensum;
 
     return string_ratio;

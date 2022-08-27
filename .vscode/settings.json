@@ -95,6 +95,15 @@
         "strstream": "cpp",
         "*.tcc": "cpp",
         "memory_resource": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "any": "cpp",
+        "codecvt": "cpp",
+        "coroutine": "cpp",
+        "source_location": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "core": "cpp",
+        "*.txx": "cpp",
+        "matrixfunctions": "cpp"
     }
 }

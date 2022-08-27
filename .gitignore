@@ -559,3 +559,6 @@ FodyWeavers.xsd
 ./.git/hooks/post-update.sample
 ./.git/hooks/pre-rebase.sample
 ./eigen/matops
+
+# large files
+*.pcd
