@@ -6,6 +6,8 @@
 #include <exception>
 
 #include "kalman_simple.hpp"
+#include "kalman_unscented.hpp"
+
 #include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
@@ -60,14 +62,14 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
 
 }
 
-void plot_filtered_values(std::vector<double>& time, std::vector<double>& pos, std::vector<double>& pos_filt)
+void plot_filtered_values(std::string title, std::vector<double>& time, std::vector<double>& pos, std::vector<double>& pos_filt)
 {
     plt::figure_size(700, 400);
     plt::named_plot("original waveform", time, pos, "r--");
     plt::named_plot("filtered waveform", time, pos_filt, "g--");
-    plt::title("Kalman Filtered Waveform");
+    plt::title(title);
     plt::legend();
-    plt::save("kalman_result.jpg", 150);
+    plt::save(title + ".jpg", 150);
 
     plt::show();
     plt::close();
@@ -84,11 +86,6 @@ void run_kalman_filter_test()
     auto pos = std::get<0>(data);
     auto time = std::get<1>(data);
 
-    // for (int i = 0; i < pos.size(); i++)
-    // {
-    //     std::cout << time[i] << " " << pos[i] << std::endl;
-    // }
-
     auto kalman_filter = LinearKalman(0.05, 0.3, 1.01);
 
     std::vector<double> pos_filt;
@@ -102,11 +99,37 @@ void run_kalman_filter_test()
         pos_filt.push_back(pos_t);
     }
 
-    plot_filtered_values(time, pos, pos_filt);
+    plot_filtered_values("Linear Kalman", time, pos, pos_filt);
+}
+
+
+void run_unscented_kalman_filter_test()
+{
+    auto data = generate_dataset();
+    auto pos = std::get<0>(data);
+    auto time = std::get<1>(data);
+
+    auto kalman_filter = UnscentedKalmanSimplePendulum();
+
+    const double line_length = 3.0;
+
+    std::vector<double> pos_filt;
+
+    for (size_t i = 0; i < pos.size(); i++)
+    {
+
+        kalman_filter.Update(pos[i], line_length, time[i]);
+
+        auto pos_t = kalman_filter.get_pos();
+        pos_filt.push_back(pos_t);
+    }
+
+    plot_filtered_values("Unscented Kalman", time, pos, pos_filt);
 }
 
 int main()
 {
     run_kalman_filter_test();
+    run_unscented_kalman_filter_test();
     return EXIT_SUCCESS;
 }
