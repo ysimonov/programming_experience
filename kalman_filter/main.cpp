@@ -62,7 +62,7 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
 
 void plot_filtered_values(std::vector<double>& time, std::vector<double>& pos, std::vector<double>& pos_filt)
 {
-    plt::figure_size(1200, 780);
+    plt::figure_size(700, 400);
     plt::named_plot("original waveform", time, pos, "r--");
     plt::named_plot("filtered waveform", time, pos_filt, "g--");
     plt::title("Kalman Filtered Waveform");
@@ -89,7 +89,7 @@ void run_kalman_filter_test()
     //     std::cout << time[i] << " " << pos[i] << std::endl;
     // }
 
-    auto kalman_filter = LinearKalman(0.15, 0.3, 1.01);
+    auto kalman_filter = LinearKalman(0.05, 0.3, 1.01);
 
     std::vector<double> pos_filt;
 
