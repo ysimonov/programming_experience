@@ -104,6 +104,10 @@
         "semaphore": "cpp",
         "core": "cpp",
         "*.txx": "cpp",
-        "matrixfunctions": "cpp"
+        "matrixfunctions": "cpp",
+        "__nullptr": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp"
     }
 }
