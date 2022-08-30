@@ -1,9 +1,9 @@
+#include <exception>
 #include <iostream>
 #include <math.h>
 #include <random>
-#include <utility>
 #include <thread>
-#include <exception>
+#include <utility>
 
 #include "kalman_simple.hpp"
 #include "kalman_unscented.hpp"
@@ -12,7 +12,7 @@
 
 namespace plt = matplotlibcpp;
 
-// returns randomly generated position and time 
+// returns randomly generated position and time
 // of the sinusoidal wave with spikes
 std::pair<std::vector<double>, std::vector<double>> generate_dataset()
 {
@@ -23,7 +23,6 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
     int N = int(total_time / dt);
     double noise_amp = 0.2;
     double pos_err_multiplier = 1.5;
-
 
     std::vector<double> time(N);
     std::vector<double> pos(N);
@@ -36,9 +35,8 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
     for (int i = 0; i < N; i++)
     {
         double cur_time = i * dt;
-        double cur_pos = std::cos(2*M_PI*cur_time/period) * 
-                        std::exp(-exp_falloff*cur_time) + 
-                        noise_amp*(2.0*(rand()/RAND_MAX)-1.0);
+        double cur_pos = std::cos(2 * M_PI * cur_time / period) * std::exp(-exp_falloff * cur_time) +
+                         noise_amp * (2.0 * (rand() / RAND_MAX) - 1.0);
 
         time[i] = cur_time;
         pos[i] = cur_pos;
@@ -59,10 +57,10 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
     }
 
     return std::make_pair(pos, time);
-
 }
 
-void plot_filtered_values(std::string title, std::vector<double>& time, std::vector<double>& pos, std::vector<double>& pos_filt)
+void plot_filtered_values(std::string title, std::vector<double> &time, std::vector<double> &pos,
+                          std::vector<double> &pos_filt)
 {
     plt::figure_size(700, 400);
     plt::named_plot("original waveform", time, pos, "r--");
@@ -74,9 +72,9 @@ void plot_filtered_values(std::string title, std::vector<double>& time, std::vec
     plt::show();
     plt::close();
 
-
     // without this line termination of matplotlib results in segmentation fault
-    // see https://stackoverflow.com/questions/67533541/py-finalize-resulting-in-segmentation-fault-for-python-3-9-but-not-for-python
+    // see
+    // https://stackoverflow.com/questions/67533541/py-finalize-resulting-in-segmentation-fault-for-python-3-9-but-not-for-python
     plt::detail::_interpreter::kill();
 }
 
@@ -101,7 +99,6 @@ void run_kalman_filter_test()
 
     plot_filtered_values("Linear Kalman", time, pos, pos_filt);
 }
-
 
 void run_unscented_kalman_filter_test()
 {

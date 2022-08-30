@@ -1,17 +1,17 @@
-#include<iostream>
-#include<string>
-#include<unordered_map>
+#include <iostream>
+#include <string>
+#include <unordered_map>
 
 using namespace std;
 
 /*
-Given two strings ransomNote and magazine, 
-return true if ransomNote can be constructed by using 
+Given two strings ransomNote and magazine,
+return true if ransomNote can be constructed by using
 the letters from magazine and false otherwise.
 
 Each letter in magazine can only be used once in ransomNote.
 
- 
+
 Example 1:
 
 Input: ransomNote = "a", magazine = "b"
@@ -30,27 +30,40 @@ Input: ransomNote = "aa", magazine = "aab"
 Output: true
 */
 
-class Solution {
-public:
-    bool canConstruct(string ransomNote, string magazine) {
+class Solution
+{
+  public:
+    bool canConstruct(string ransomNote, string magazine)
+    {
         unordered_map<char, int> dict;
-        for (char& ch : magazine) {
+        for (char &ch : magazine)
+        {
             auto it = dict.find(ch);
-            if (it != dict.end()) {
+            if (it != dict.end())
+            {
                 it->second += 1;
-            } else {
-                dict[ch] = 1; 
+            }
+            else
+            {
+                dict[ch] = 1;
             }
         }
-        for (char& ch : ransomNote) {
+        for (char &ch : ransomNote)
+        {
             auto it = dict.find(ch);
-            if (it != dict.end()) {
-                if (it->second > 0) {
+            if (it != dict.end())
+            {
+                if (it->second > 0)
+                {
                     it->second -= 1;
-                } else {
+                }
+                else
+                {
                     return false;
                 }
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -58,16 +71,15 @@ public:
     }
 };
 
-int main() {
+int main()
+{
     auto sol = Solution();
     string ransomNote = "aa";
     string magazine = "aab";
     bool res = sol.canConstruct(ransomNote, magazine);
     if (res)
-        cout << "Can construct ransomNote " << 
-        ransomNote << " from magazine " << magazine << endl;
+        cout << "Can construct ransomNote " << ransomNote << " from magazine " << magazine << endl;
     else
-        cout << "Cannot construct ransomNote " << 
-        ransomNote << " from magazine " << magazine << endl;
+        cout << "Cannot construct ransomNote " << ransomNote << " from magazine " << magazine << endl;
     return EXIT_SUCCESS;
 }

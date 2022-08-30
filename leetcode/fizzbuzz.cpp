@@ -5,7 +5,7 @@ answer[i] == "FizzBuzz" if i is divisible by 3 and 5.
 answer[i] == "Fizz" if i is divisible by 3.
 answer[i] == "Buzz" if i is divisible by 5.
 answer[i] == i (as a string) if none of the above conditions are true.
- 
+
 
 Example 1:
 
@@ -19,7 +19,7 @@ Example 3:
 
 Input: n = 15
 Output: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]
- 
+
 
 Constraints:
 
@@ -35,21 +35,31 @@ using namespace std;
 using std::cout;
 using std::endl;
 
-class Solution {
-public:
+class Solution
+{
+  public:
     Solution() = default;
-    vector<string> fizzBuzz(int n) {
+    vector<string> fizzBuzz(int n)
+    {
         vector<string> result;
         result.reserve(n);
-        int k = min(n+1, 10001);
-        for(int i = 1; i < k; i++) {
-            if ((i % 3 == 0) && (i % 5 == 0)) {
+        int k = min(n + 1, 10001);
+        for (int i = 1; i < k; i++)
+        {
+            if ((i % 3 == 0) && (i % 5 == 0))
+            {
                 result.emplace_back("FizzBuzz");
-            } else if (i % 3 == 0) {
+            }
+            else if (i % 3 == 0)
+            {
                 result.emplace_back("Fizz");
-            } else if (i % 5 == 0) {
+            }
+            else if (i % 5 == 0)
+            {
                 result.emplace_back("Buzz");
-            } else {
+            }
+            else
+            {
                 auto temp = to_string(i);
                 cout << temp << endl;
                 result.emplace_back(temp);
@@ -59,12 +69,14 @@ public:
     }
 };
 
-int main() {
+int main()
+{
 
     Solution sol;
     auto result = sol.fizzBuzz(10);
 
-    for (auto &it : result) {
+    for (auto &it : result)
+    {
         cout << it << '\n';
     }
 

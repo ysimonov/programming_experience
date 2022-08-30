@@ -12,32 +12,31 @@ class Animal
     std::string _name = "";
     std::string _sound = "";
 
-public:
-    Animal();   // default constructor
-    Animal(const std::string& type, const std::string& name, const std::string& sound);
-    Animal(const Animal&); // copy constructor
-    Animal& operator = (const Animal&); // copy operator
-    ~Animal();  // destructor
+  public:
+    Animal(); // default constructor
+    Animal(const std::string &type, const std::string &name, const std::string &sound);
+    Animal(const Animal &);            // copy constructor
+    Animal &operator=(const Animal &); // copy operator
+    ~Animal();                         // destructor
 
     void print() const;
 };
 
 // this is definition of the default constructor (explicit)
-Animal::Animal() 
-: _type(unk), _name(unk), _sound(unk)
+Animal::Animal() : _type(unk), _name(unk), _sound(unk)
 {
     puts("default constructor");
 }
 
 // constructor with three arguments
 // given through initialization list
-Animal::Animal(const std::string& type, const std::string& name, const std::string& sound)
-: _type(type), _name(name), _sound(sound)
+Animal::Animal(const std::string &type, const std::string &name, const std::string &sound)
+    : _type(type), _name(name), _sound(sound)
 {
     puts("constructor with arguments");
 }
 
-Animal::Animal(const Animal& rhs)
+Animal::Animal(const Animal &rhs)
 {
     puts("copy constructor");
     _name = clone_prefix + rhs._name;
@@ -56,7 +55,7 @@ void Animal::print() const
     printf("%s the %s says %s\n", _name.c_str(), _type.c_str(), _sound.c_str());
 }
 
-Animal& Animal::operator = (const Animal& rhs)
+Animal &Animal::operator=(const Animal &rhs)
 {
     puts("copy operator");
     if (this != &rhs)

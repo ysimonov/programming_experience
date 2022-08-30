@@ -1,6 +1,6 @@
+#include <boost/asio.hpp>
 #include <iostream>
 #include <string>
-#include <boost/asio.hpp>
 
 using namespace boost::asio;
 using ip::tcp;
@@ -11,21 +11,24 @@ using ip::tcp;
 Server receives messages from the client
 and responds back.
 */
-std::string readMessage(tcp::socket& socket) {
+std::string readMessage(tcp::socket &socket)
+{
     // buffer of the data that is being communicated
     boost::asio::streambuf buffer;
     boost::asio::read_until(socket, buffer, "\n");
     // convert data to std::string
-    std::string data = boost::asio::buffer_cast<const char*>(buffer.data());
+    std::string data = boost::asio::buffer_cast<const char *>(buffer.data());
     return data;
 }
 
-void sendMessage(tcp::socket& socket, const std::string& message) {
+void sendMessage(tcp::socket &socket, const std::string &message)
+{
     const std::string msg = message + "\n";
     boost::asio::write(socket, boost::asio::buffer(message));
 }
 
-int main() {
+int main()
+{
     // io object is needed whenever program is using asio
     boost::asio::io_service io_service;
     // listen for a new connection
