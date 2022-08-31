@@ -1,6 +1,6 @@
 #include <iostream>
 
-// Overloading operators with member functions
+// Overloading operators with nonmember functions
 
 // Simple demonstration class to operate on rational numbers
 class Rational
