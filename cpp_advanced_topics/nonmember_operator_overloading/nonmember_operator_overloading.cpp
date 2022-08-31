@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 // Overloading operators with nonmember functions
 
@@ -29,6 +30,9 @@ class Rational
 
     // Operator overloads
     Rational &operator=(const Rational &);
+
+    // This handles strings
+    operator std::string() const;
 };
 
 // Returns a reference to itself
@@ -44,25 +48,6 @@ Rational &Rational::operator=(const Rational &rhs)
         _d = rhs.denomenator();
     }
     return *this;
-}
-
-Rational::~Rational()
-{
-    _n = 0;
-    _d = 1;
-}
-
-// overloading the left shift operator
-std::ostream &operator<<(std::ostream &o, const Rational &r)
-{
-    if (r.denomenator() == 1)
-    {
-        return o << r.numerator();
-    }
-    else
-    {
-        return o << r.numerator() << '/' << r.denomenator();
-    }
 }
 
 // this is an example of the non-member operator overloading
@@ -86,6 +71,30 @@ Rational operator*(const Rational &lhs, const Rational &rhs)
 Rational operator/(const Rational &lhs, const Rational &rhs)
 {
     return Rational(lhs.numerator() * rhs.denomenator(), lhs.denomenator() * rhs.numerator());
+}
+
+Rational::operator std::string() const
+{
+    if (_d == 1)
+    {
+        return std::to_string(_n);
+    }
+    else
+    {
+        return std::to_string(_n) + "/" + std::to_string(_d);
+    }
+}
+
+Rational::~Rational()
+{
+    _n = 0;
+    _d = 1;
+}
+
+// overloading the left shift operator
+std::ostream &operator<<(std::ostream &o, const Rational &r)
+{
+    return o << std::string(r);
 }
 
 int main()
@@ -128,6 +137,11 @@ int main()
     std::cout << 14 << " - " << b << " = " << 14 - b << std::endl;
     std::cout << 14 << " * " << b << " = " << 14 * b << std::endl;
     std::cout << 14 << " / " << b << " = " << 14 / b << std::endl;
+
+    // for this part to work we need a conversion operator overload
+    std::string s = "Rational value is: ";
+    s += b;
+    std::cout << s << std::endl;
 
     return 0;
 }
