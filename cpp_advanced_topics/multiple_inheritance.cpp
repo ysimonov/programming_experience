@@ -35,7 +35,13 @@ class Animal
     Animal(const std::string &n, const std::string &t, const std::string s) : _name(n), _type(t), _sound(s){};
 
   public:
-    void speak() const;
+    // virtual keyword tells the compiler
+    // that this method can be overloaded by
+    // the derived classes
+    // however, you HAVE TO declare the virtual destructor
+    // because the overloaded function is the derived class
+    // may require a different destructor
+    virtual void speak() const;
 
     // getter functions to access private
     // class variables
@@ -53,6 +59,8 @@ class Animal
     {
         return _sound;
     }
+
+    virtual ~Animal(){};
 };
 
 void Animal::speak() const
@@ -92,6 +100,14 @@ class Cat : public Animal, public Fur
     {
         return ++_petted;
     }
+
+    // this method override base class's method for
+    // a derived class
+    void speak() const
+    {
+        Animal::speak();
+        puts("purrr");
+    }
 };
 
 // Pig class is derived from Animal class
@@ -123,6 +139,15 @@ int main()
     std::cout << "The " << p.type() << " has been fed " << p.feed() << " times " << std::endl;
 
     std::cout << "The " << c.type() << " grooms her " << c.quality() << " fur " << std::endl;
+
+    std::cout << "\n\n";
+
+    // array of animal pointers
+    Animal *ap[] = {&d, &c, &p};
+    for (auto p : ap)
+    {
+        p->speak();
+    }
 
     return 0;
 }
