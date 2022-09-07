@@ -66,22 +66,17 @@ matrix[i][j] is either 0 or 1.
 
 using namespace std;
 
-class Solution
-{
-  public:
-    vector<int> kWeakestRows(vector<vector<int>> &mat, int k)
-    {
-
+class Solution {
+   public:
+    vector<int> kWeakestRows(vector<vector<int>> &mat, int k) {
         // queue with elements in increasing order
         // using compare function inside declaration
         priority_queue<pp, vector<pp>, greater<pp>> soldier_count;
 
         int i = 0;
-        for (const auto &row : mat)
-        {
+        for (const auto &row : mat) {
             int number_of_soldiers = 0;
-            for (const auto &el : row)
-            {
+            for (const auto &el : row) {
                 if (!el)
                     break;
                 number_of_soldiers += el;
@@ -92,8 +87,7 @@ class Solution
 
         vector<int> result;
         i = 0;
-        while (!soldier_count.empty() && i < k)
-        {
+        while (!soldier_count.empty() && i < k) {
             const pp count = soldier_count.top();
             soldier_count.pop();
             // cout << count.first << " " << count.second << endl;
@@ -105,14 +99,12 @@ class Solution
     }
 };
 
-int main()
-{
+int main() {
     auto sol = Solution();
     vector<vector<int>> mat = {{1, 1, 0, 0, 0}, {1, 1, 1, 1, 0}, {1, 0, 0, 0, 0}, {1, 1, 0, 0, 0}, {1, 1, 1, 1, 1}};
     int k = 3;
     auto res = sol.kWeakestRows(mat, k);
-    for (auto r : res)
-    {
+    for (auto r : res) {
         cout << r << " ";
     }
     return EXIT_SUCCESS;

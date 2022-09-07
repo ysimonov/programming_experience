@@ -5,58 +5,47 @@
 #define print(x) std::cout << x << " "
 #define println(x) std::cout << x << std::endl
 
-void ModifyValue(int &val)
-{
+void ModifyValue(int &val) {
     val = 1000;
 }
 
 // Calculate sum by passing an address and access using a pointer as input argument
-void Sum(int *array_ptr, int size)
-{
+void Sum(int *array_ptr, int size) {
     int sum = 0;
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         sum += array_ptr[i];
     }
     println("Sum of array elements using pointer to an array: " << sum);
 }
 
 // Calculate sum by passing an address and access using a pointer as input argument
-void SumInputPtr1D(int *array_ptr, int size)
-{
+void SumInputPtr1D(int *array_ptr, int size) {
     int sum = 0;
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         sum += array_ptr[i];
     }
     println("Sum of array elements using pointer to an array: " << sum);
 }
 
 // Formal parameter as sized array
-void SumInputSizedArr1D(int array_ptr[100], int size)
-{
+void SumInputSizedArr1D(int array_ptr[100], int size) {
     int sum = 0;
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         sum += array_ptr[i];
     }
     println("Sum of array elements using formal parameter as sized array: " << sum);
 }
 
 // Formal parameter as unsized array
-void SumInputUnsizedArr1D(int array_ptr[], int size)
-{
+void SumInputUnsizedArr1D(int array_ptr[], int size) {
     int sum = 0;
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         sum += array_ptr[i];
     }
     println("Sum of array elements using formal parameter as sized array: " << sum);
 }
 
-int main()
-{
-
+int main() {
     // *** Example Single Element ***
     int *number{nullptr};
     number = new int;
@@ -108,7 +97,7 @@ int main()
     // *** Example 1D Array using unique_ptr ***
     {
         std::unique_ptr<int[]> number_array_uptr(new int[15]);
-    } // destructor gets called 15 times
+    }  // destructor gets called 15 times
 
     // *** Example 2D Array using unique ptr ***
     {
@@ -117,11 +106,9 @@ int main()
 
         println("\nprinting unique pointer (2D): ");
 
-        for (int i = 0; i < rows; i++)
-        {
+        for (int i = 0; i < rows; i++) {
             number_matrix_uptr[i] = std::make_unique<int[]>(cols);
-            for (int j = 0; j < cols; j++)
-            {
+            for (int j = 0; j < cols; j++) {
                 number_matrix_uptr[i][j] = i * j;
                 print(number_matrix_uptr[i][j]);
             }
@@ -142,16 +129,14 @@ int main()
 
     println("printing vector (2D): ");
 
-    for (int i = 0; i < rows; i++)
-    {
+    for (int i = 0; i < rows; i++) {
         std::vector<int> temp(cols);
 
         // transfer memory from temp to number_matrix_vec
         number_matrix_vec[i] = std::move(temp);
 
         // assign elements
-        for (int j = 0; j < cols; j++)
-        {
+        for (int j = 0; j < cols; j++) {
             number_matrix_vec[i][j] = i * j;
             print(number_matrix_vec[i][j]);
         }
@@ -163,8 +148,8 @@ int main()
     int int_value{45};
     double double_value{33.65};
 
-    int &ref_to_int_value_1{int_value};  // assignment via initialization
-    int &ref_to_int_value_2 = int_value; // assignment via assignment
+    int &ref_to_int_value_1{int_value};   // assignment via initialization
+    int &ref_to_int_value_2 = int_value;  // assignment via assignment
     double &ref_to_double_value_1{double_value};
 
     println("int value: " << int_value);

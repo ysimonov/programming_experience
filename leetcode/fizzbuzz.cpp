@@ -35,31 +35,21 @@ using namespace std;
 using std::cout;
 using std::endl;
 
-class Solution
-{
-  public:
+class Solution {
+   public:
     Solution() = default;
-    vector<string> fizzBuzz(int n)
-    {
+    vector<string> fizzBuzz(int n) {
         vector<string> result;
         result.reserve(n);
         int k = min(n + 1, 10001);
-        for (int i = 1; i < k; i++)
-        {
-            if ((i % 3 == 0) && (i % 5 == 0))
-            {
+        for (int i = 1; i < k; i++) {
+            if ((i % 3 == 0) && (i % 5 == 0)) {
                 result.emplace_back("FizzBuzz");
-            }
-            else if (i % 3 == 0)
-            {
+            } else if (i % 3 == 0) {
                 result.emplace_back("Fizz");
-            }
-            else if (i % 5 == 0)
-            {
+            } else if (i % 5 == 0) {
                 result.emplace_back("Buzz");
-            }
-            else
-            {
+            } else {
                 auto temp = to_string(i);
                 cout << temp << endl;
                 result.emplace_back(temp);
@@ -69,14 +59,11 @@ class Solution
     }
 };
 
-int main()
-{
-
+int main() {
     Solution sol;
     auto result = sol.fizzBuzz(10);
 
-    for (auto &it : result)
-    {
+    for (auto &it : result) {
         cout << it << '\n';
     }
 

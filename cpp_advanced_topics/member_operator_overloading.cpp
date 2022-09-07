@@ -3,12 +3,11 @@
 // Overloading operators with member functions
 
 // Simple demonstration class to operate on rational numbers
-class Rational
-{
+class Rational {
     int _n = 0;
     int _d = 1;
 
-  public:
+   public:
     // A constructor with default value (default constructor)
     Rational(int numerator = 0, int denomenator = 1) : _n(numerator), _d(denomenator){};
 
@@ -18,12 +17,10 @@ class Rational
     ~Rational();
 
     // Getter functions
-    int numerator() const
-    {
+    int numerator() const {
         return _n;
     };
-    int denomenator() const
-    {
+    int denomenator() const {
         return _d;
     };
 
@@ -46,67 +43,54 @@ class Rational
 
 // Returns a reference to itself
 // This is accomplished by using *this
-Rational &Rational::operator=(const Rational &rhs)
-{
+Rational &Rational::operator=(const Rational &rhs) {
     // check if copying from the same object or not
     // this is the pointer to this object, and
     // &rhs is the reference to the object on rhs
-    if (this != &rhs)
-    {
+    if (this != &rhs) {
         _n = rhs.numerator();
         _d = rhs.denomenator();
     }
     return *this;
 }
 
-Rational Rational::operator+(const Rational &rhs) const
-{
+Rational Rational::operator+(const Rational &rhs) const {
     return Rational((_n * rhs._d) + (_d * rhs._n), _d * rhs._d);
 }
 
-Rational Rational::operator-(const Rational &rhs) const
-{
+Rational Rational::operator-(const Rational &rhs) const {
     return Rational((_n * rhs._d) - (_d * rhs._n), _d * rhs._d);
 }
 
-Rational Rational::operator*(const Rational &rhs) const
-{
+Rational Rational::operator*(const Rational &rhs) const {
     return Rational(_n * rhs._n, _d * rhs._d);
 }
 
-Rational Rational::operator/(const Rational &rhs) const
-{
+Rational Rational::operator/(const Rational &rhs) const {
     return Rational(_n * rhs._d, _d * rhs._n);
 }
 
-Rational::~Rational()
-{
+Rational::~Rational() {
     _n = 0;
     _d = 1;
 }
 
 // overloading the left shift operator
-std::ostream &operator<<(std::ostream &o, const Rational &r)
-{
-    if (r.denomenator() == 1)
-    {
+std::ostream &operator<<(std::ostream &o, const Rational &r) {
+    if (r.denomenator() == 1) {
         return o << r.numerator();
-    }
-    else
-    {
+    } else {
         return o << r.numerator() << '/' << r.denomenator();
     }
 }
 
-int main()
-{
-
+int main() {
     // constructing with just a numerator
-    Rational a = 7; // 7 / 1
+    Rational a = 7;  // 7 / 1
     std::cout << "a is: " << a << std::endl;
 
     // constructing with a numerator and a denominator
-    Rational b(5, 3); // 5 / 3
+    Rational b(5, 3);  // 5 / 3
     std::cout << "b is: " << b << std::endl;
 
     // copy constructor
@@ -121,7 +105,7 @@ int main()
     d = c;
     std::cout << "d is: " << d << std::endl;
 
-    Rational &e = d; // reference
+    Rational &e = d;  // reference
 
     // assignment to self
     d = e;

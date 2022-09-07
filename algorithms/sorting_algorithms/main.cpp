@@ -1,13 +1,12 @@
-#include <thread>
 #include <chrono>
+#include <iostream>
+#include <thread>
 
 #include "sort.hpp"
 
-#include <iostream>
-
 // compile: g++ -O2 main.cpp -o main
 
-template<typename T>
+template <typename T>
 void printArray(T arr[], int n) {
     for (size_t i = 0; i < n; i++) {
         std::cout << arr[i] << " ";
@@ -16,7 +15,6 @@ void printArray(T arr[], int n) {
 }
 
 int main() {
-
     int n;
     int selection;
 
@@ -31,14 +29,14 @@ int main() {
     if ((selection < 0) || (selection > 4)) {
         std::cout << "Invalid selection";
         exit(1);
-    } 
+    }
 
     std::cout << "Enter size of the array: ";
     std::cin >> n;
 
     double* arr = new double[n];
     for (size_t i = 0; i < n; i++) {
-        arr[i] = rand() % 100; // generate a random number between 0 and 99
+        arr[i] = rand() % 100;  // generate a random number between 0 and 99
     }
 
     std::cout << "Before Sorting: " << std::endl;
@@ -46,7 +44,7 @@ int main() {
 
     std::cout << "Selection: " << selection << std::endl;
 
-    switch(selection) {
+    switch (selection) {
         case 0:
             bubbleSort<double>(arr, n);
             break;
@@ -63,7 +61,7 @@ int main() {
             selectionSort<double>(arr, n);
             break;
     };
-    
+
     std::cout << "After Sorting: " << std::endl;
     printArray<double>(arr, n);
 

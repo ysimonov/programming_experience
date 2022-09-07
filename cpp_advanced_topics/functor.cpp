@@ -1,23 +1,19 @@
 #include <iostream>
 
-class MultiplyBy
-{
+class MultiplyBy {
     int mult = 1;
     MultiplyBy();
 
-  public:
+   public:
     MultiplyBy(int n) : mult(n){};
 
     // this is the function operator
-    int operator()(int n) const
-    {
+    int operator()(int n) const {
         return mult * n;
     };
 };
 
-int main()
-{
-
+int main() {
     const MultiplyBy times4(4);
     const MultiplyBy times10(10);
     const MultiplyBy times15(15);

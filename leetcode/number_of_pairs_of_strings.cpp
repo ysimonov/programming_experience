@@ -52,31 +52,26 @@ nums[i] and target consist of digits.
 nums[i] and target do not have leading zeros.
 */
 
-class Solution
-{
-  public:
-    int numOfPairs(vector<string> &nums, string target)
-    {
+class Solution {
+   public:
+    int numOfPairs(vector<string> &nums, string target) {
         // get length of the target string
         int target_len = target.length();
         // get lengths of each number string in nums
         int number_of_nums = nums.size();
         vector<int> num_lengths;
-        for (const auto &num : nums)
-        {
+        for (const auto &num : nums) {
             num_lengths.emplace_back(num.length());
         }
         // calculate number of valid combinations
         int number_of_combinations = 0;
-        for (int i = 0; i < number_of_nums; i++)
-        {
+        for (int i = 0; i < number_of_nums; i++) {
             // check if this combination is possible
             const auto &len1 = num_lengths[i];
             if (len1 > target_len)
                 continue;
             const auto &s1 = nums[i];
-            for (int j = 0; j < number_of_nums; j++)
-            {
+            for (int j = 0; j < number_of_nums; j++) {
                 // indices should not repeat
                 if (i == j)
                     continue;
@@ -88,10 +83,8 @@ class Solution
                 string s12 = s1 + s2;
                 bool failed = false;
                 // iterate over every character in the concatenated string
-                for (int k = 0; k < target_len; k++)
-                {
-                    if (s12[k] != target[k])
-                    {
+                for (int k = 0; k < target_len; k++) {
+                    if (s12[k] != target[k]) {
                         failed = true;
                         break;
                     }
@@ -104,8 +97,7 @@ class Solution
     }
 };
 
-int main()
-{
+int main() {
     auto sol = Solution();
     vector<string> nums({"777", "7", "77", "77"});
     string target("7777");

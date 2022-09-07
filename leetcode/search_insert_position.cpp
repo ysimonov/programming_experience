@@ -27,11 +27,9 @@ Input: nums = [1,3,5,6], target = 7
 Output: 4
 */
 
-class Solution
-{
-  public:
-    int searchInsert(vector<int> &nums, int target)
-    {
+class Solution {
+   public:
+    int searchInsert(vector<int> &nums, int target) {
         int size = nums.size();
 
         // empty vector, insert in the first position
@@ -49,19 +47,13 @@ class Solution
             return idx_r + 1;
 
         int idx_m = idx_l + (idx_r - idx_l) / 2;
-        while (idx_l <= idx_r)
-        {
+        while (idx_l <= idx_r) {
             const int &num = nums[idx_m];
-            if (target == num)
-            {
+            if (target == num) {
                 return idx_m;
-            }
-            else if (target > num)
-            {
+            } else if (target > num) {
                 idx_l = idx_m + 1;
-            }
-            else
-            {
+            } else {
                 idx_r = idx_m - 1;
             }
             idx_m = idx_l + (idx_r - idx_l) / 2;
@@ -70,8 +62,7 @@ class Solution
     }
 };
 
-int main()
-{
+int main() {
     auto sol = Solution();
     vector<int> test_vec = {1, 1, 5, 60, 61, 61, 62, 120, 140, 155};
     int target = 62;

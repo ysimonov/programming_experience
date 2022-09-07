@@ -1,9 +1,9 @@
-#include <iostream>
-#include <string>
 #include <algorithm>
-#include <memory>
-#include <vector>
 #include <cstring>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 /*
     This program finds the length of the longest sequence of characters between
@@ -14,28 +14,24 @@
     LENGTH: 19 (including white spaces)
 */
 
-
 class LongestCommonSubsequence {
-
     std::string string1;
     std::string string2;
     size_t length1;
     size_t length2;
 
-    public:
+   public:
+    LongestCommonSubsequence(std::string str1, std::string str2, size_t len1, size_t len2);
+    ~LongestCommonSubsequence();
 
-        LongestCommonSubsequence(std::string str1, std::string str2, size_t len1, size_t len2);
-        ~LongestCommonSubsequence();
+    int length;             // length of the longest common subsequence
+    std::string substring;  // longest common character sequence
 
-        int length; // length of the longest common subsequence
-        std::string substring;  // longest common character sequence
+    int GetSubsequenceLength();
+    std::string GetSubsequence();
 
-        int GetSubsequenceLength();
-        std::string GetSubsequence();
-
-    private:
-        std::unique_ptr<std::unique_ptr<int[]>[]> dist;
-
+   private:
+    std::unique_ptr<std::unique_ptr<int[]>[]> dist;
 };
 
 LongestCommonSubsequence::LongestCommonSubsequence(std::string str1, std::string str2, size_t len1, size_t len2) {
@@ -47,7 +43,7 @@ LongestCommonSubsequence::LongestCommonSubsequence(std::string str1, std::string
 
 LongestCommonSubsequence::~LongestCommonSubsequence() {
     if (dist != nullptr) {
-        for(int i=0; i<length1; i++)
+        for (int i = 0; i < length1; i++)
             dist[i].reset();
         dist.reset();
     }
@@ -65,17 +61,17 @@ int LongestCommonSubsequence::GetSubsequenceLength() {
 
     // space allocation and initialization
     dist = std::make_unique<std::unique_ptr<int[]>[]>(M);
-    for (i=0; i<M; i++) {
+    for (i = 0; i < M; i++) {
         dist[i] = std::make_unique<int[]>(N);
-        for (j=0; j<N; j++) {
+        for (j = 0; j < N; j++) {
             dist[i][j] = 0;
         }
     }
 
     // longest common subsequence algorithm (finding length)
-    for (j=1; j<N; j++) {
+    for (j = 1; j < N; j++) {
         jm = j - 1;
-        for (i=1; i<M; i++) {
+        for (i = 1; i < M; i++) {
             im = i - 1;
             if (string1[im] == string2[jm]) {
                 dist[i][j] = dist[im][jm] + 1;
@@ -98,31 +94,28 @@ std::string LongestCommonSubsequence::GetSubsequence() {
     i = length1;
     j = length2;
     while (i > 0 && j > 0) {
-        if (string1[i-1] == string2[j-1]) {
-            substring += string1[i-1];
+        if (string1[i - 1] == string2[j - 1]) {
+            substring += string1[i - 1];
             i--;
             j--;
-        }
-        else if (dist[i-1][j] > dist[i][j-1]) {
+        } else if (dist[i - 1][j] > dist[i][j - 1]) {
             i--;
-        }
-        else {
+        } else {
             j--;
         }
     }
     std::reverse(substring.begin(), substring.end());
-    return substring; 
+    return substring;
 }
 
 int main() {
-
     std::string str1, str2;
     size_t str1_len, str2_len;
 
     int longest_common_subsequence_len;
     std::string subsequence_string;
 
-    std::cout << "Enter first string: "; 
+    std::cout << "Enter first string: ";
     std::getline(std::cin, str1);
     str1_len = str1.length();
 

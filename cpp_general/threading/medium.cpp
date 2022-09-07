@@ -7,25 +7,22 @@
 #include <thread>
 #include <vector>
 
-template <typename Data> class Queue
-{
-
-  private:
+template <typename Data>
+class Queue {
+   private:
     std::queue<Data> queue_;
     mutable std::mutex mutex_;
     std::condition_variable condition_variable_;
 
-  public:
-    void wait()
-    {
+   public:
+    void wait() {
         std::unique_lock<std::mutex> lock(mutex_);
         {
             condition_variable_.wait(lock);
         }
     }
 
-    void push(const Data &data)
-    {
+    void push(const Data &data) {
         std::unique_lock<std::mutex> lock(mutex_);
 
         queue_.push(data);
@@ -33,17 +30,15 @@ template <typename Data> class Queue
         // this avoids waiting thread of being notified if the call to push
         // throws an exception
 
-        lock.unlock(); // unlock the mutex
+        lock.unlock();  // unlock the mutex
 
         condition_variable_.notify_one();
     }
 
-    bool try_pop(Data &popped_value)
-    {
+    bool try_pop(Data &popped_value) {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        if (queue_.empty())
-        {
+        if (queue_.empty()) {
             return false;
         }
 
@@ -52,49 +47,41 @@ template <typename Data> class Queue
         return true;
     }
 
-    void wait_and_pop(Data &popped_value)
-    {
+    void wait_and_pop(Data &popped_value) {
         std::unique_lock<std::mutex> lock(mutex_);
-        while (queue_.empty())
-        {
+        while (queue_.empty()) {
             condition_variable_.wait(lock);
         }
         popped_value = queue_.front();
         queue_.pop();
     }
 
-    bool empty() const
-    {
+    bool empty() const {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.empty();
     }
 
-    Data &front()
-    {
+    Data &front() {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.front();
     }
 
-    Data const &front() const
-    {
+    Data const &front() const {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.front();
     }
 
-    void pop()
-    {
+    void pop() {
         std::lock_guard<std::mutex> lock(mutex_);
         queue_.pop();
     }
 };
 
-template <typename Data> void run_tasks(Queue<Data> &queue)
-{
-
+template <typename Data>
+void run_tasks(Queue<Data> &queue) {
     std::thread::id thread_id = std::this_thread::get_id();
 
-    while (!queue.empty())
-    {
+    while (!queue.empty()) {
         std::string proxy;
         {
             proxy = queue.front();
@@ -109,9 +96,7 @@ template <typename Data> void run_tasks(Queue<Data> &queue)
     }
 }
 
-int main()
-{
-
+int main() {
     Queue<std::string> queue;
 
     std::vector<std::string> data{"2561033035", "0980870098", "2039811994", "8258410235", "8454513599", "2446827749",
@@ -120,20 +105,17 @@ int main()
                                   "1262178254", "5229712067", "8649355391", "3634975519", "2976561557", "4631284221",
                                   "6239834064", "7003835068", "3478530388", "4979001579", "9085912268", "5031440393"};
 
-    for (const auto &el : data)
-    {
+    for (const auto &el : data) {
         queue.push(el);
     }
 
     std::vector<std::thread> threads;
     uint16_t num_threads = 4;
-    for (int i = 0; i < num_threads; i++)
-    {
+    for (int i = 0; i < num_threads; i++) {
         threads.push_back(std::thread(run_tasks<std::string>, std::ref(queue)));
     }
 
-    for (auto &th : threads)
-    {
+    for (auto &th : threads) {
         th.join();
     }
     return 0;

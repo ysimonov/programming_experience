@@ -7,16 +7,14 @@
 /*
  * A class to read data from a csv file.
  */
-class CSVReader
-{
+class CSVReader {
     std::string fileName;
     char delimeter;
     bool header;
 
-  public:
+   public:
     // object constructor
-    CSVReader(std::string filename, char delm = ',', bool hdr = true) : fileName(filename), delimeter(delm), header(hdr)
-    {
+    CSVReader(std::string filename, char delm = ',', bool hdr = true) : fileName(filename), delimeter(delm), header(hdr) {
     }
 
     // Function to fetch data from a CSV File

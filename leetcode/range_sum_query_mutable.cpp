@@ -31,29 +31,24 @@ At most 3 * 104 calls will be made to update and sumRange.
 
 */
 
-class NumArray
-{
-  public:
+class NumArray {
+   public:
     vector<int> nums;
     int init_sum = 0;
     int size = 0;
 
-    NumArray(vector<int> &nums_)
-    {
+    NumArray(vector<int> &nums_) {
         nums = nums_;
         init_sum = accumulate(nums.begin(), nums.end(), 0);
         size = nums_.size();
     }
 
-    void update(int index, int val)
-    {
+    void update(int index, int val) {
         init_sum += val - nums[index];
         nums[index] = val;
     }
 
-    int sumRange(int left, int right)
-    {
-
+    int sumRange(int left, int right) {
         if (left == right)
             return nums[left];
 
@@ -70,18 +65,16 @@ class NumArray
     }
 };
 
-int main()
-{
-
+int main() {
     vector<int> nums = {1, 3, 5};
     auto numArray = NumArray(nums);
 
-    auto res = numArray.sumRange(0, 2); // return 1 + 3 + 5 = 9
+    auto res = numArray.sumRange(0, 2);  // return 1 + 3 + 5 = 9
     cout << "Sum Range (1): " << res << endl;
 
-    numArray.update(1, 2); // nums = [1, 2, 5]
+    numArray.update(1, 2);  // nums = [1, 2, 5]
 
-    res = numArray.sumRange(0, 2); // return 1 + 2 + 5 = 8
+    res = numArray.sumRange(0, 2);  // return 1 + 2 + 5 = 8
     cout << "Sum Range (2): " << res << endl;
 
     return EXIT_SUCCESS;

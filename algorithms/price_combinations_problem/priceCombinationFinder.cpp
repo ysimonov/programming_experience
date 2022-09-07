@@ -1,7 +1,7 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <iostream>
 #include <numeric>
+#include <vector>
 
 // compile: g++ -std=c++11 -O2 priceCombinationFinder.cpp -o priceCombinationFinder
 
@@ -11,7 +11,7 @@ std::vector<std::vector<int>> getPriceCombinations(const std::vector<std::vector
     }
     std::vector<std::vector<int>> priceCombinations;
     for (auto& price : listOfPrices[0]) {
-        priceCombinations.push_back({ price });
+        priceCombinations.push_back({price});
     }
     std::vector<std::vector<int>> temp;
     for (size_t i = 1; i < listOfPrices.size(); ++i) {

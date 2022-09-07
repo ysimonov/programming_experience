@@ -11,8 +11,7 @@ using boost::asio::ip::tcp;
 
 //! TODO: figure out why "assign: Bad file descriptor" appears during execution
 
-std::string getDateTime()
-{
+std::string getDateTime() {
     char datetime_string[200];
 
     time_t curr_time;
@@ -31,40 +30,32 @@ std::string getDateTime()
 }
 
 // enable_shred_from_this allows to keep the TCP Connection alive
-class TCPConnection : public boost::enable_shared_from_this<TCPConnection>
-{
-
-  public:
-    TCPConnection(boost::asio::io_context &io_context) : socket_(io_context)
-    {
+class TCPConnection : public boost::enable_shared_from_this<TCPConnection> {
+   public:
+    TCPConnection(boost::asio::io_context &io_context) : socket_(io_context) {
     }
 
     typedef boost::shared_ptr<TCPConnection> pointer;
 
-    static pointer create(boost::asio::io_context &io_context)
-    {
+    static pointer create(boost::asio::io_context &io_context) {
         return pointer(new TCPConnection(io_context));
     }
 
-    tcp::socket &socket()
-    {
+    tcp::socket &socket() {
         return socket_;
     }
 
     void start();
 
-  private:
-    void handleWrite(const boost::system::error_code & /*error*/, size_t /*bytes transferred*/)
-    {
+   private:
+    void handleWrite(const boost::system::error_code & /*error*/, size_t /*bytes transferred*/) {
     }
 
     tcp::socket socket_;
     std::string message_;
 };
 
-void TCPConnection::start()
-{
-
+void TCPConnection::start() {
     // timestamp
     message_ = getDateTime();
 
@@ -74,17 +65,14 @@ void TCPConnection::start()
                                          boost::asio::placeholders::bytes_transferred));
 }
 
-class TCPServer
-{
-
-  public:
+class TCPServer {
+   public:
     TCPServer(boost::asio::io_context &io_context, const uint16_t port_number)
-        : io_context_(io_context), acceptor_(io_context, tcp::v4(), port_number)
-    {
+        : io_context_(io_context), acceptor_(io_context, tcp::v4(), port_number) {
         startAccept();
     }
 
-  private:
+   private:
     void startAccept();
     void handleAccept(TCPConnection::pointer /*new connection*/, const boost::system::error_code & /*error*/);
 
@@ -92,9 +80,7 @@ class TCPServer
     tcp::acceptor acceptor_;
 };
 
-void TCPServer::startAccept()
-{
-
+void TCPServer::startAccept() {
     // socket connection
     TCPConnection::pointer new_connection = TCPConnection::create(io_context_);
 
@@ -103,30 +89,21 @@ void TCPServer::startAccept()
                                                                  boost::asio::placeholders::error));
 }
 
-void TCPServer::handleAccept(TCPConnection::pointer new_connection, const boost::system::error_code &error)
-{
-    if (!error)
-    {
+void TCPServer::handleAccept(TCPConnection::pointer new_connection, const boost::system::error_code &error) {
+    if (!error) {
         new_connection->start();
     }
     startAccept();
 }
 
-int main()
-{
-
+int main() {
     boost::asio::io_context io_context;
     static const uint16_t port_number = 1234;
 
-    try
-    {
-
+    try {
         auto server = TCPServer(io_context, port_number);
         io_context.run();
-    }
-    catch (std::exception &e)
-    {
-
+    } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     }

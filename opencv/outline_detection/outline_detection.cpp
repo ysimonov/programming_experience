@@ -1,58 +1,52 @@
 #include <iostream>
-#include <vector>
-#include <string>
+#include <opencv2/opencv.hpp>
 #include <regex>
 #include <stdexcept>
-
-#include <opencv2/opencv.hpp>
+#include <string>
+#include <vector>
 
 // compillation:
 // g++ -o outline_detection outline_detection.cpp `pkg-config opencv4 --cflags --libs`
 
 class ImageProcessor {
-    public:
-        cv::Mat original_image;
-        cv::Mat rescaled_image;
-        cv::Mat grey_scale_image;
-        cv::Mat contour_image;
+   public:
+    cv::Mat original_image;
+    cv::Mat rescaled_image;
+    cv::Mat grey_scale_image;
+    cv::Mat contour_image;
 
-        ImageProcessor() 
-        {};
+    ImageProcessor(){};
 
-        ImageProcessor(cv::Mat& image) 
-            : original_image(image)
-        {};
+    ImageProcessor(cv::Mat& image)
+        : original_image(image){};
 
-        void ReadImage(std::string image_path);
-        void RescaleImage(cv::Mat& input_imag, int scale_percent, int interpolation);
-        void CreateGreyScaleImage(cv::Mat& input_imag);
-        void DisplayImage(cv::Mat& input_imag, std::string title);
-        void FindImageContours(cv::Mat& input_imag);
-};  
+    void ReadImage(std::string image_path);
+    void RescaleImage(cv::Mat& input_imag, int scale_percent, int interpolation);
+    void CreateGreyScaleImage(cv::Mat& input_imag);
+    void DisplayImage(cv::Mat& input_imag, std::string title);
+    void FindImageContours(cv::Mat& input_imag);
+};
 
 /*
  * Reads image from specified image path
  * Throws runtime_error if image has no data
  */
 void ImageProcessor::ReadImage(std::string image_path) {
-
     // normalize path (replace double back slash with single forward slash)
     std::string image_path_norm = std::regex_replace(
         image_path,
         std::regex(R"(\\)"),
-        R"(/)"
-    );
+        R"(/)");
 
     // remove double or single quote if included in path
     image_path_norm = std::regex_replace(
         image_path_norm,
         std::regex(R"([\"'])"),
-        R"()"
-    );
+        R"()");
 
     original_image = cv::imread(image_path_norm);
 
-    if (!original_image.data) 
+    if (!original_image.data)
         throw std::runtime_error("No Image Data!");
 
     // std::cout << "Original Height: " << original_image.rows << " Width: " << original_image.cols << std::endl;
@@ -60,15 +54,13 @@ void ImageProcessor::ReadImage(std::string image_path) {
 
 /*
  * Rescales input_image (cv::Mat) based on scale_percent (int) (1-100)
- * interpolation (enum cv::InterpolationFlags, int) one of 
+ * interpolation (enum cv::InterpolationFlags, int) one of
  * cv::INTER_LINEAR, cv::INTER_NEAREST, cv::INTER_AREA, cv::INTER_CUBIC,  cv::INTER_LANCZOS4, etc.
  */
 void ImageProcessor::RescaleImage(
-    cv::Mat& input_image, 
-    int scale_percent, 
-    int interpolation = cv::INTER_AREA
-) {
-
+    cv::Mat& input_image,
+    int scale_percent,
+    int interpolation = cv::INTER_AREA) {
     // get original image dimensions
     int width = input_image.cols;
     int height = input_image.rows;
@@ -82,10 +74,9 @@ void ImageProcessor::RescaleImage(
 
     // resize image using Lancsoz interpolation
     cv::resize(
-        input_image, rescaled_image, 
-        cv::Size(rescaled_width, rescaled_height), 
-        interpolation
-    );
+        input_image, rescaled_image,
+        cv::Size(rescaled_width, rescaled_height),
+        interpolation);
 }
 
 /*
@@ -115,12 +106,11 @@ void ImageProcessor::DisplayImage(cv::Mat& input_image, std::string title = "Ima
  * Applies contours on the input image
  */
 void ImageProcessor::FindImageContours(cv::Mat& input_imag) {
-
     // convert RGB to Grey Scale
     if (input_imag.channels() > 1) {
         this->CreateGreyScaleImage(input_imag);
     }
-    
+
     // apply binary thresholding
     cv::Mat thresholded;
     cv::threshold(grey_scale_image, thresholded, 230, 255, cv::THRESH_OTSU);
@@ -137,12 +127,9 @@ void ImageProcessor::FindImageContours(cv::Mat& input_imag) {
         contour_image = rescaled_image.clone();
     }
     cv::drawContours(contour_image, contours, -1, cv::Scalar(0, 255, 0), 2);
-
 }
 
-
 int main() {
-    
     auto image_processor = ImageProcessor();
 
     std::string image_path;

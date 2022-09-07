@@ -1,22 +1,18 @@
-#include <algorithm> // generate
+#include <algorithm>  // generate
 #include <iostream>
 #include <memory>
 #include <vector>
 
-void foo(std::unique_ptr<int> ptr)
-{
+void foo(std::unique_ptr<int> ptr) {
     std::cout << "Received unique pointer into 'foo' function with a value of " << *ptr.get() << std::endl;
 }
 
-std::unique_ptr<int> get_ptr()
-{
+std::unique_ptr<int> get_ptr() {
     std::unique_ptr<int> ptr = std::make_unique<int>(59);
     return ptr;
 }
 
-void examples()
-{
-
+void examples() {
     // create dynamic int with a value of 20 owned by a unique ptr
     {
         std::unique_ptr<int> ptr1 = std::make_unique<int>(20);
@@ -67,8 +63,7 @@ void examples()
     std::generate(vec_ptr.begin(), vec_ptr.end(), []() { return std::make_unique<int>(15); });
 
     std::cout << "Allocated vector of 20 element unique ptr, all having values of 15" << std::endl;
-    for (auto &&val : vec_ptr)
-    {
+    for (auto &&val : vec_ptr) {
         std::cout << *val << " ";
     }
     std::cout << std::endl;
@@ -115,8 +110,7 @@ void examples()
     // reset doesn't produce an exception
     shared_arr1.reset();
 
-    if (shared_arr1 == nullptr)
-    {
+    if (shared_arr1 == nullptr) {
         std::cout << "Shared pointer array shared_arr1 was deleted by calling reset()\n";
     }
 
@@ -124,8 +118,7 @@ void examples()
     //! the ownership can be transferred with std::move
     std::shared_ptr<int[]> shared_arr3 = std::move(shared_arr2);
 
-    if (shared_arr2 == nullptr)
-    {
+    if (shared_arr2 == nullptr) {
         std::cout << "Ownership of shared_arr2 was transfered to shared_arr3!\n";
         std::cout << "First element of shared_arr3: " << shared_arr3[0] << std::endl;
     }
@@ -133,8 +126,7 @@ void examples()
     shared_arr2.reset();
 }
 
-int main()
-{
+int main() {
     examples();
     return 0;
 }

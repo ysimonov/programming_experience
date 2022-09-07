@@ -6,8 +6,7 @@ using ip::tcp;
 
 // compile with -pthread flag
 
-int main()
-{
+int main() {
     boost::asio::io_service io_service;
     // create socket
     tcp::socket socket(io_service);
@@ -23,19 +22,15 @@ int main()
     const auto buffered_msg{boost::asio::buffer(msg)};
     boost::system::error_code error;
     boost::asio::write(socket, buffered_msg, error);
-    if (!error)
-    {
+    if (!error) {
         std::cout << "Message was successfully delivered!\n";
     }
     // getting response from server
     boost::asio::streambuf receive_buffer;
     boost::asio::read(socket, receive_buffer, boost::asio::transfer_all(), error);
-    if (error && error != boost::asio::error::eof)
-    {
+    if (error && error != boost::asio::error::eof) {
         std::cout << "Failed to receive a message from the server!\n";
-    }
-    else
-    {
+    } else {
         const std::string data = boost::asio::buffer_cast<const char *>(receive_buffer.data());
         std::cout << "Received a message from the server: " << data << std::endl;
     }

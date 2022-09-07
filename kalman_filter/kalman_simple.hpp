@@ -9,8 +9,8 @@
 
 using Eigen::EigenBase;
 
-template <typename Derived> void print_shape(const EigenBase<Derived> &x)
-{
+template <typename Derived>
+void print_shape(const EigenBase<Derived> &x) {
     std::cout << "(" << x.rows() << ", " << x.cols() << ")";
 }
 
@@ -20,9 +20,8 @@ template <typename Derived> void print_shape(const EigenBase<Derived> &x)
  * the higher alpha is, the more less kalman filter is affeted by previous measurements
  * See Equations: https://www.kalmanfilter.net/multiSummary.html
  */
-class LinearKalman
-{
-  private:
+class LinearKalman {
+   private:
     double proc_acc_err_;
     double meas_pos_err_;
     double alpha_;
@@ -47,26 +46,20 @@ class LinearKalman
     double t_prev_;
     bool time_start_set_ = false;
 
-  public:
+   public:
     // constructor with initializations
     LinearKalman(double proc_acc_err = 0.1, double meas_pos_err = 0.1, double alpha = 1.0)
-        : proc_acc_err_(proc_acc_err), meas_pos_err_(std::abs(meas_pos_err)), alpha_(std::abs(alpha))
-    {
+        : proc_acc_err_(proc_acc_err), meas_pos_err_(std::abs(meas_pos_err)), alpha_(std::abs(alpha)) {
         var_acc_ = std::pow(proc_acc_err, 2);
         var_pos_ = std::pow(meas_pos_err, 2);
         R = var_pos_;
     }
 
-    void Update(double meas, double meas_time)
-    {
-
+    void Update(double meas, double meas_time) {
         // set start time
-        if (time_start_set_)
-        {
+        if (time_start_set_) {
             dt_ = meas_time - t_prev_;
-        }
-        else
-        {
+        } else {
             time_start_set_ = true;
         }
 
@@ -95,9 +88,9 @@ class LinearKalman
         x = F * x;
 
         // Update Kalman Gain
-        auto PHT = P * HT;             // [3, 3] * [3, 1] = [3, 1]
-        auto HPHT = H * PHT;           // [1, 3] * [3, 1] = [1, 1]
-        auto S = HPHT.coeff(0, 0) + R; // scalar
+        auto PHT = P * HT;              // [3, 3] * [3, 1] = [3, 1]
+        auto HPHT = H * PHT;            // [1, 3] * [3, 1] = [1, 1]
+        auto S = HPHT.coeff(0, 0) + R;  // scalar
 
         // Kalman Gain
         // Note that denominator is constant, hence no inversion required
@@ -121,28 +114,23 @@ class LinearKalman
         acc_ = x.coeff(2, 0);
     }
 
-    double get_pos()
-    {
+    double get_pos() {
         return pos_;
     }
 
-    double get_vel()
-    {
+    double get_vel() {
         return vel_;
     }
 
-    double get_acc()
-    {
+    double get_acc() {
         return acc_;
     }
 
-    std::tuple<double, double> get_pos_vel()
-    {
+    std::tuple<double, double> get_pos_vel() {
         return std::make_tuple(pos_, vel_);
     }
 
-    std::tuple<double, double, double> get_pos_vel_acc()
-    {
+    std::tuple<double, double, double> get_pos_vel_acc() {
         return std::make_tuple(pos_, vel_, acc_);
     }
 };

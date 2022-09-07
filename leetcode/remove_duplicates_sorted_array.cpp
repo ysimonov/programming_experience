@@ -20,27 +20,20 @@ Do not allocate extra space for another array.
 You must do this by modifying the input array in-place with O(1) extra memory.
 */
 
-class Solution
-{
-  public:
-    int removeDuplicates(vector<int> &nums)
-    {
+class Solution {
+   public:
+    int removeDuplicates(vector<int> &nums) {
         size_t size = nums.size();
-        if (size <= 1)
-        {
+        if (size <= 1) {
             return size;
         }
         int i = 1;
         auto num = nums[0];
-        while (i != nums.size())
-        {
-            if (nums[i] == num)
-            {
+        while (i != nums.size()) {
+            if (nums[i] == num) {
                 vector<int>::iterator it = nums.begin() + i;
                 nums.erase(it);
-            }
-            else
-            {
+            } else {
                 num = nums[i];
                 i += 1;
             }
@@ -50,8 +43,7 @@ class Solution
     }
 };
 
-int main()
-{
+int main() {
     auto sol = Solution();
     vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
     auto k = sol.removeDuplicates(nums);

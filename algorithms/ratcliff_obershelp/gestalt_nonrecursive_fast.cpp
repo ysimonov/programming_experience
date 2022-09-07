@@ -1,11 +1,11 @@
-#include <iostream>
-#include <string>
 #include <algorithm>
-#include <memory>
-#include <vector>
 #include <array>
 #include <chrono>
+#include <iostream>
+#include <memory>
 #include <sstream>
+#include <string>
+#include <vector>
 
 /*
     AUTHOR: Yevgeniy Simonov, 2022
@@ -17,12 +17,12 @@
     The main idea behind the algorithm is finding longest common substring, then
     labelling start and end point of the string as anchor. The left anchor will be used
     for repeated longest commmon substring calculation to the left of the anchor,
-    while the right anchor will be used for repeated longest common substring calculation 
+    while the right anchor will be used for repeated longest common substring calculation
     to the right of the anchor.
 
     The result of the algorithm is similarity ratio, that is described by:
     SIMILARITY RATIO = 2 * NUMBER OF MATCHING CHARACTERS / (LENGTH OF STRING 1 + LENGTH OF STRING 2)
-    
+
     Let Km = NUMBER OF MATCHING CHARACTERS
 
     Basic steps:
@@ -43,11 +43,11 @@
     4.) Therefore, Km = Km + left = 7 + 0 = 7
     5.) To the right of the anchor the next longest substring is "re you?" => right = 7
     6.) Therefore, Km = Km + right = 7 + 7 = 14
-    7.) Now the remainining part that hasn't been examined is 
+    7.) Now the remainining part that hasn't been examined is
         "How A" (string1) and "how a" (string2) => left from anchor "re you?" => left = 3
     8.) Therefore, Km = Km + left = 14 + 3 = 17
     9.) similarity_ratio = 2 * 17 / (20 + 25) = 0.75555...
-    
+
     OVERALL Substring patters found during this algorithm + remaining strings:
     1.) "orning "  len(7)
         Remaining string1: "M" (left)   "How Are you?" (right)
@@ -68,7 +68,6 @@
         No remaining strings. => total length = 7 + 7 + 3 = 17
 */
 
-
 inline std::array<int, 3> LongestCommonSubstring(std::string str1, std::string str2) {
     size_t len1 = str1.length();
     size_t len2 = str2.length();
@@ -81,20 +80,20 @@ inline std::array<int, 3> LongestCommonSubstring(std::string str1, std::string s
     int right_str1_anchor = -1;
     int right_str2_anchor = -1;
     int len_anchor = 0;
-    int * dist = nullptr;
+    int* dist = nullptr;
     int P = M * N;
     int temp;
     dist = new int[P];
-    for (i=0; i<P; i++) {
+    for (i = 0; i < P; i++) {
         dist[i] = 0;
     }
-    for (j=1; j<N; j++) {
+    for (j = 1; j < N; j++) {
         jm = j - 1;
-        for (i=1; i<M; i++) {
+        for (i = 1; i < M; i++) {
             im = i - 1;
             if (str1[im] == str2[jm]) {
-                temp = dist[im*N+jm] + 1;
-                dist[i*N+j] = temp;
+                temp = dist[im * N + jm] + 1;
+                dist[i * N + j] = temp;
                 if (len_anchor < temp) {
                     len_anchor = temp;
                     right_str1_anchor = i;
@@ -173,7 +172,6 @@ double SimilarityRatio(std::string str1, std::string str2) {
 }
 
 int main() {
-
     int num_times_to_run = 1;
 
     std::string str1, str2;
@@ -184,7 +182,7 @@ int main() {
     std::string substring_string;
     double similarity_ratio;
 
-    std::cout << "Enter first string: "; 
+    std::cout << "Enter first string: ";
     std::getline(std::cin, str1);
 
     std::cout << "Enter second string: ";
@@ -196,12 +194,12 @@ int main() {
     num_runs_ss >> num_times_to_run;
 
     auto begin = std::chrono::high_resolution_clock::now();
-    for (int i=0; i<num_times_to_run; i++) {
+    for (int i = 0; i < num_times_to_run; i++) {
         similarity_ratio = SimilarityRatio(str1, str2);
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Similarity Ratio: " << similarity_ratio << std::endl;
-    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count())/(1e9) << "s" << std::endl;
+    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / (1e9) << "s" << std::endl;
 
     return EXIT_SUCCESS;
 }

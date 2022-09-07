@@ -1,13 +1,13 @@
-#include "common.hpp"
-
 #include <iostream>
 
-template<typename T>
+#include "common.hpp"
+
+template <typename T>
 void quickSort(T* arr, int left, int right) {
     int l = left;
     int r = right - 1;
     int size = right - left;
-    if (size > 1) { 
+    if (size > 1) {
         T pivot = arr[rand() % size + l];
         while (l < r) {
             while (arr[r] > pivot && r > l) {

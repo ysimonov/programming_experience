@@ -1,22 +1,20 @@
+#include <math.h>
+
 #include <exception>
 #include <iostream>
-#include <math.h>
 #include <random>
 #include <thread>
 #include <utility>
 
 #include "kalman_simple.hpp"
 #include "kalman_unscented.hpp"
-
 #include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
 // returns randomly generated position and time
 // of the sinusoidal wave with spikes
-std::pair<std::vector<double>, std::vector<double>> generate_dataset()
-{
-
+std::pair<std::vector<double>, std::vector<double>> generate_dataset() {
     double dt = 0.05;
     double period = 10.0;
     double total_time = period * 10;
@@ -32,8 +30,7 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
     double exp_falloff = 0.005;
 
     // generate waveform
-    for (int i = 0; i < N; i++)
-    {
+    for (int i = 0; i < N; i++) {
         double cur_time = i * dt;
         double cur_pos = std::cos(2 * M_PI * cur_time / period) * std::exp(-exp_falloff * cur_time) +
                          noise_amp * (2.0 * (rand() / RAND_MAX) - 1.0);
@@ -50,8 +47,7 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
     std::mt19937 generator(rand_dev());
     std::uniform_int_distribution<int> distr(range_from, range_to);
 
-    for (int i = 0; i < int(N / 20); i++)
-    {
+    for (int i = 0; i < int(N / 20); i++) {
         auto rand_pos = distr(generator);
         pos[rand_pos] *= pos_err_multiplier;
     }
@@ -60,8 +56,7 @@ std::pair<std::vector<double>, std::vector<double>> generate_dataset()
 }
 
 void plot_filtered_values(std::string title, std::vector<double> &time, std::vector<double> &pos,
-                          std::vector<double> &pos_filt)
-{
+                          std::vector<double> &pos_filt) {
     plt::figure_size(700, 400);
     plt::named_plot("original waveform", time, pos, "r--");
     plt::named_plot("filtered waveform", time, pos_filt, "g--");
@@ -78,8 +73,7 @@ void plot_filtered_values(std::string title, std::vector<double> &time, std::vec
     plt::detail::_interpreter::kill();
 }
 
-void run_kalman_filter_test()
-{
+void run_kalman_filter_test() {
     auto data = generate_dataset();
     auto pos = std::get<0>(data);
     auto time = std::get<1>(data);
@@ -88,9 +82,7 @@ void run_kalman_filter_test()
 
     std::vector<double> pos_filt;
 
-    for (size_t i = 0; i < pos.size(); i++)
-    {
-
+    for (size_t i = 0; i < pos.size(); i++) {
         kalman_filter.Update(pos[i], time[i]);
 
         auto pos_t = kalman_filter.get_pos();
@@ -100,8 +92,7 @@ void run_kalman_filter_test()
     plot_filtered_values("Linear Kalman", time, pos, pos_filt);
 }
 
-void run_unscented_kalman_filter_test()
-{
+void run_unscented_kalman_filter_test() {
     auto data = generate_dataset();
     auto pos = std::get<0>(data);
     auto time = std::get<1>(data);
@@ -112,9 +103,7 @@ void run_unscented_kalman_filter_test()
 
     std::vector<double> pos_filt;
 
-    for (size_t i = 0; i < pos.size(); i++)
-    {
-
+    for (size_t i = 0; i < pos.size(); i++) {
         kalman_filter.Update(pos[i], line_length, time[i]);
 
         auto pos_t = kalman_filter.get_pos();
@@ -124,8 +113,7 @@ void run_unscented_kalman_filter_test()
     plot_filtered_values("Unscented Kalman", time, pos, pos_filt);
 }
 
-int main()
-{
+int main() {
     run_kalman_filter_test();
     run_unscented_kalman_filter_test();
     return EXIT_SUCCESS;

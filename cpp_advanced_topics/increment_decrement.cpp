@@ -1,10 +1,9 @@
 #include <iostream>
 
-class Number
-{
+class Number {
     int value = 0;
 
-  public:
+   public:
     // constructor
     Number(int x = 0) : value(x){};
 
@@ -14,14 +13,12 @@ class Number
     // no modification to member variables is possible
     // only mutable variables can be written into inside
     // of a const function
-    int get_value() const
-    {
+    int get_value() const {
         return value;
     }
 
     // setter function
-    void set_value(int x)
-    {
+    void set_value(int x) {
         value = x;
     }
 
@@ -39,8 +36,7 @@ class Number
 
 // pre-increment
 // changes the value of the value's reference
-Number &Number::operator++()
-{
+Number &Number::operator++() {
     std::cout << "pre-increment: ";
     value += 1;
 
@@ -49,8 +45,7 @@ Number &Number::operator++()
 }
 
 // post-increment
-Number Number::operator++(int)
-{
+Number Number::operator++(int) {
     std::cout << "post-increment: ";
     Number temp = *this;
     value += 1;
@@ -58,8 +53,7 @@ Number Number::operator++(int)
 }
 
 // pre-decrement
-Number &Number::operator--()
-{
+Number &Number::operator--() {
     std::cout << "pre-decrement: ";
     value -= 1;
 
@@ -68,21 +62,18 @@ Number &Number::operator--()
 }
 
 // post-decrement
-Number Number::operator--(int)
-{
+Number Number::operator--(int) {
     std::cout << "post-decrement: ";
     Number temp = *this;
     value -= 1;
     return temp;
 }
 
-std::ostream &operator<<(std::ostream &o, const Number &n)
-{
+std::ostream &operator<<(std::ostream &o, const Number &n) {
     return o << (n.get_value());
 }
 
-int main()
-{
+int main() {
     Number n(42);
     std::cout << "n = " << n << std::endl;
     std::cout << "++n = " << ++n << std::endl;

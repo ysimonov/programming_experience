@@ -10,16 +10,14 @@
 /*
  * A class to read data from a csv file.
  */
-class CSVReader
-{
+class CSVReader {
     std::string fileName;
     char delimeter;
     bool header;
 
-  public:
+   public:
     // object constructor
-    CSVReader(std::string filename, char delm = ',', bool hdr = true) : fileName(filename), delimeter(delm), header(hdr)
-    {
+    CSVReader(std::string filename, char delm = ',', bool hdr = true) : fileName(filename), delimeter(delm), header(hdr) {
     }
 
     // Function to fetch data from a CSV File
@@ -29,8 +27,7 @@ class CSVReader
 /*
  * To detect and ignore byte order mark character
  */
-bool SkipBOM(std::istream &in)
-{
+bool SkipBOM(std::istream &in) {
     char test[4] = {0};
     in.read(test, 3);
     if (strcmp(test, "\xEF\xBB\xBF") == 0)
@@ -43,14 +40,11 @@ bool SkipBOM(std::istream &in)
  * Parses through csv file line by line and returns the data
  * in vector of vector of strings.
  */
-std::vector<std::vector<std::string>> CSVReader::getData()
-{
-
+std::vector<std::vector<std::string>> CSVReader::getData() {
     std::ifstream file(fileName, std::ios::in);
 
     // if file does not exist
-    if (!file.is_open())
-    {
+    if (!file.is_open()) {
         throw std::runtime_error("Could not open file");
     }
 
@@ -61,12 +55,8 @@ std::vector<std::vector<std::string>> CSVReader::getData()
     std::vector<std::string> column_names;
 
     // Read the column names
-    if (header)
-    {
-
-        if (file.good())
-        {
-
+    if (header) {
+        if (file.good()) {
             // Extract the first line in the file
             std::getline(file, line);
 
@@ -76,24 +66,20 @@ std::vector<std::vector<std::string>> CSVReader::getData()
             SkipBOM(ss);
 
             // Extract each column name
-            while (std::getline(ss, colname, delimeter))
-            {
+            while (std::getline(ss, colname, delimeter)) {
                 column_names.emplace_back(colname);
             }
         }
 
         std::cout << "Column names: " << std::endl;
-        for (const auto &column_name : column_names)
-        {
+        for (const auto &column_name : column_names) {
             std::cout << column_name << " ";
         }
         std::cout << std::endl;
     }
 
     // Iterate through each line and split the content using delimeter
-    while (std::getline(file, line))
-    {
-
+    while (std::getline(file, line)) {
         // Create a stringstream of the current line
         std::stringstream ss(line);
 
@@ -103,8 +89,7 @@ std::vector<std::vector<std::string>> CSVReader::getData()
         // Track column index
         int col_idx = 0;
 
-        while (std::getline(ss, val, delimeter))
-        {
+        while (std::getline(ss, val, delimeter)) {
             row.emplace_back(val);
         }
 
@@ -119,9 +104,7 @@ std::vector<std::vector<std::string>> CSVReader::getData()
     return data_list;
 }
 
-int main()
-{
-
+int main() {
     // std::string filename = "file.csv";
     // CSVReader reader(filename, ',', true);
 
@@ -129,22 +112,17 @@ int main()
     CSVReader reader(filename, '\t', true);
 
     // get data from csv file
-    try
-    {
+    try {
         std::vector<std::vector<std::string>> data_list = reader.getData();
 
         // print contents of the file row by row
-        for (const auto &row : data_list)
-        {
-            for (const auto &str : row)
-            {
+        for (const auto &row : data_list) {
+            for (const auto &str : row) {
                 std::cout << str << " ";
             }
             std::cout << std::endl;
         }
-    }
-    catch (std::runtime_error)
-    {
+    } catch (std::runtime_error) {
         std::cout << "File " << filename << " does not exist!\n";
         return EXIT_FAILURE;
     }

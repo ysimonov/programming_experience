@@ -1,11 +1,11 @@
-#include "priceCombinationFinder.hpp"
-
 #include <iostream>
+
+#include "priceCombinationFinder.hpp"
 
 // Compile: g++ -std=c++11 -O2 main.cpp priceCombinationFinder.cpp -o main
 
 void print(std::vector<int> v) {
-    for(auto& e : v) {
+    for (auto& e : v) {
         std::cout << e << " ";
     }
     std::cout << std::endl;
@@ -24,8 +24,7 @@ int main() {
         {1, 5, 10},
         {6, 8},
         {22, 35, 20},
-        {12, 2, 10}
-    };
+        {12, 2, 10}};
     auto validPriceCombination = getValidPriceCombination(listOfPrices, totalPrice);
     print(validPriceCombination);
     return EXIT_SUCCESS;

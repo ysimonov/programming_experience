@@ -1,10 +1,10 @@
-#include "common.hpp"
-
 #include <iostream>
+
+#include "common.hpp"
 
 typedef long long int ssize_t;
 
-template<typename T>
+template <typename T>
 void insertionSort(T arr[], int n) {
     for (size_t i = 1; i < n; i++) {
         ssize_t j = ssize_t(i);

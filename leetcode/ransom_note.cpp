@@ -30,40 +30,27 @@ Input: ransomNote = "aa", magazine = "aab"
 Output: true
 */
 
-class Solution
-{
-  public:
-    bool canConstruct(string ransomNote, string magazine)
-    {
+class Solution {
+   public:
+    bool canConstruct(string ransomNote, string magazine) {
         unordered_map<char, int> dict;
-        for (char &ch : magazine)
-        {
+        for (char &ch : magazine) {
             auto it = dict.find(ch);
-            if (it != dict.end())
-            {
+            if (it != dict.end()) {
                 it->second += 1;
-            }
-            else
-            {
+            } else {
                 dict[ch] = 1;
             }
         }
-        for (char &ch : ransomNote)
-        {
+        for (char &ch : ransomNote) {
             auto it = dict.find(ch);
-            if (it != dict.end())
-            {
-                if (it->second > 0)
-                {
+            if (it != dict.end()) {
+                if (it->second > 0) {
                     it->second -= 1;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -71,8 +58,7 @@ class Solution
     }
 };
 
-int main()
-{
+int main() {
     auto sol = Solution();
     string ransomNote = "aa";
     string magazine = "aab";

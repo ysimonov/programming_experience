@@ -1,12 +1,11 @@
-#include <iostream>
 #include <open3d/Open3D.h>
+
+#include <iostream>
 #include <string>
 
 using namespace open3d;
 
-int main()
-{
-
+int main() {
     std::string bag_filename = "";
 
     t::io::RSBagReader bag_reader;
@@ -14,8 +13,7 @@ int main()
 
     auto im_rgbd = bag_reader.NextFrame();
 
-    while (!bag_reader.IsEOF())
-    {
+    while (!bag_reader.IsEOF()) {
         // process im_rgbd.depth_ and im_rgbd.color_
         im_rgbd = bag_reader.NextFrame();
     }

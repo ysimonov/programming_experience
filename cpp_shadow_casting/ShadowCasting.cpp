@@ -73,8 +73,7 @@ using namespace std;
  * Struct containing x, y components of the start and end points
  * of a single segment (line segment)
  */
-struct sSegment
-{
+struct sSegment {
     float sx, sy;
     float ex, ey;
 };
@@ -82,8 +81,7 @@ struct sSegment
 /*
  * Each cell constitutes of 4 distinct line segments
  */
-struct sCell
-{
+struct sCell {
     // segment id in the pool of segments
     int segment_id[4];
 
@@ -94,40 +92,34 @@ struct sCell
     bool exists = false;
 };
 
-enum
-{
+enum {
     NORTH,
     SOUTH,
     EAST,
     WEST
 };
 
-class ShadowCasting2D : public olc::PixelGameEngine
-{
-  public:
-    ShadowCasting2D()
-    {
+class ShadowCasting2D : public olc::PixelGameEngine {
+   public:
+    ShadowCasting2D() {
         sAppName = "ShadowCasting2D";
     }
 
-    bool OnUserCreate() override
-    {
+    bool OnUserCreate() override {
         pWorld = make_unique<sCell[]>(nWorldWidth * nWorldHeight);
         return true;
     }
 
-    bool OnUserUpdate(float fElapsedTime) override
-    {
+    bool OnUserUpdate(float fElapsedTime) override {
         float fBlockWidth = 16.0f;
         float fSourceX = GetMouseX();
         float fSourceY = GetMouseY();
 
         // Checks if block is pressed or released
-        if (GetMouse(0).bReleased)
-        {
+        if (GetMouse(0).bReleased) {
             // i = y * width + x
-            int i = int(fSourceY / fBlockWidth) * nWorldWidth + // haw far vertically
-                    int(fSourceX / fBlockWidth);                // how far horizontally
+            int i = int(fSourceY / fBlockWidth) * nWorldWidth +  // haw far vertically
+                    int(fSourceX / fBlockWidth);                 // how far horizontally
 
             pWorld[i].exists = !pWorld[i].exists;
 
@@ -140,20 +132,16 @@ class ShadowCasting2D : public olc::PixelGameEngine
         Clear(olc::BLACK);
 
         // Draw Blocks from Tile Map
-        for (int x = 0; x < nWorldWidth; x++)
-        {
-            for (int y = 0; y < nWorldHeight; y++)
-            {
-                if (pWorld[y * nWorldWidth + x].exists)
-                {
+        for (int x = 0; x < nWorldWidth; x++) {
+            for (int y = 0; y < nWorldHeight; y++) {
+                if (pWorld[y * nWorldWidth + x].exists) {
                     FillRect(x * fBlockWidth, y * fBlockWidth, fBlockWidth, fBlockWidth, olc::BLUE);
                 }
             }
         }
 
         // Draw Edges
-        for (auto &seg : vecSegments)
-        {
+        for (auto &seg : vecSegments) {
             DrawLine(seg.sx, seg.sy, seg.ex, seg.ey);
             FillCircle(seg.sx, seg.sy, 3, olc::RED);
             FillCircle(seg.ex, seg.ey, 3, olc::RED);
@@ -162,7 +150,7 @@ class ShadowCasting2D : public olc::PixelGameEngine
         return true;
     }
 
-  private:
+   private:
     unique_ptr<sCell[]> pWorld = nullptr;
     const int nWorldWidth = 40;
     const int nWorldHeight = 30;
@@ -170,18 +158,14 @@ class ShadowCasting2D : public olc::PixelGameEngine
     vector<sSegment> vecSegments;
 
     void ConvertTileMapToPolyMap(int sx, int sy, int w, int h, float fBlockWidth,
-                                 int pitch // world width
-    )
-    {
+                                 int pitch  // world width
+    ) {
         // clear polymap
         vecSegments.clear();
 
-        for (int x = 0; x < w; x++)
-        {
-            for (int y = 0; y < h; y++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int j = 0; j < 4; j++) {
                     // no segments in the pool
                     auto &pW = pWorld[(y + sy) * pitch + (x + sx)];
                     pW.segment_exists[j] = false;
@@ -194,11 +178,9 @@ class ShadowCasting2D : public olc::PixelGameEngine
         auto wm = w - 1;
         auto hm = h - 1;
 
-        for (int x = 1; x < wm; x++)
-        {
+        for (int x = 1; x < wm; x++) {
             int xpsx = x + sx;
-            for (int y = 1; y < hm; y++)
-            {
+            for (int y = 1; y < hm; y++) {
                 int ypsy = y + sy;
 
                 // current index of cell in the array
@@ -222,19 +204,16 @@ class ShadowCasting2D : public olc::PixelGameEngine
 
                 // *** WEST ***
                 // if the cell does not have the western segment
-                if (!pWorld[w].exists)
-                {
+                if (!pWorld[w].exists) {
                     // nothern neighbour has a western segment
-                    if (pWorld[n].segment_exists[WEST])
-                    {
+                    if (pWorld[n].segment_exists[WEST]) {
                         // extend the segment
                         vecSegments[pWorld[n].segment_id[WEST]].ey += fBlockWidth;
                         pWorld[i].segment_id[WEST] = pWorld[n].segment_id[WEST];
                         pWorld[i].segment_exists[WEST] = true;
                     }
                     // create a western segment
-                    else
-                    {
+                    else {
                         sSegment segment;
 
                         segment.sx = xpsx + fBlockWidth;
@@ -254,19 +233,16 @@ class ShadowCasting2D : public olc::PixelGameEngine
 
                 // *** EAST ***
                 // if the cell does not have the eastern segment
-                if (!pWorld[e].exists)
-                {
+                if (!pWorld[e].exists) {
                     // nothern neighbour has a eastern segment
-                    if (pWorld[n].segment_exists[EAST])
-                    {
+                    if (pWorld[n].segment_exists[EAST]) {
                         // extend the segment
                         vecSegments[pWorld[n].segment_id[EAST]].ey += fBlockWidth;
                         pWorld[i].segment_id[EAST] = pWorld[n].segment_id[EAST];
                         pWorld[i].segment_exists[EAST] = true;
                     }
                     // create a eastern segment
-                    else
-                    {
+                    else {
                         sSegment segment;
 
                         segment.sx = xpsx + 1 + fBlockWidth;
@@ -286,19 +262,16 @@ class ShadowCasting2D : public olc::PixelGameEngine
 
                 // *** NORTH ***
                 // if the cell does not have the northern segment
-                if (!pWorld[n].exists)
-                {
+                if (!pWorld[n].exists) {
                     // nothern neighbour has a western segment
-                    if (pWorld[w].segment_exists[NORTH])
-                    {
+                    if (pWorld[w].segment_exists[NORTH]) {
                         // extend the segment
                         vecSegments[pWorld[w].segment_id[NORTH]].ex += fBlockWidth;
                         pWorld[i].segment_id[NORTH] = pWorld[w].segment_id[NORTH];
                         pWorld[i].segment_exists[NORTH] = true;
                     }
                     // create a northern segment
-                    else
-                    {
+                    else {
                         sSegment segment;
 
                         segment.sx = xpsx + fBlockWidth;
@@ -318,19 +291,16 @@ class ShadowCasting2D : public olc::PixelGameEngine
 
                 // *** SOUTH ***
                 // if the cell does not have the western segment
-                if (!pWorld[s].exists)
-                {
+                if (!pWorld[s].exists) {
                     // nothern neighbour has a western segment
-                    if (pWorld[w].segment_exists[SOUTH])
-                    {
+                    if (pWorld[w].segment_exists[SOUTH]) {
                         // extend the segment
                         vecSegments[pWorld[w].segment_id[SOUTH]].ex += fBlockWidth;
                         pWorld[i].segment_id[SOUTH] = pWorld[w].segment_id[SOUTH];
                         pWorld[i].segment_exists[SOUTH] = true;
                     }
                     // create a southern segment
-                    else
-                    {
+                    else {
                         sSegment segment;
 
                         segment.sx = xpsx + fBlockWidth;
@@ -352,12 +322,10 @@ class ShadowCasting2D : public olc::PixelGameEngine
     }
 };
 
-int main()
-{
+int main() {
     ShadowCasting2D simulation;
 
-    if (simulation.Construct(640, 480, 2, 2))
-    {
+    if (simulation.Construct(640, 480, 2, 2)) {
         simulation.Start();
     }
 }

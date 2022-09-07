@@ -1,15 +1,15 @@
-#include <iostream>
-#include <string>
-#include <map>
 #include <algorithm>
 #include <chrono>
+#include <iostream>
+#include <map>
 #include <memory>
+#include <string>
 
 /*
     This algorithm implements True Damerau-Levenshtein distance between two strings, using reference from
     https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
 
-    For example, 
+    For example,
     distance("banana", "abnana") = 1
     distance("anana", "banana") = 1
 */
@@ -17,7 +17,7 @@
 inline int min(int x, int y) {
     if (x < y)
         return x;
-    else 
+    else
         return y;
 }
 
@@ -26,8 +26,7 @@ int DamerauLevenshtein(std::string str1, std::string str2) {
     size_t str2_len = str2.length();
     if (str1_len == 0) {
         return str2_len;
-    } 
-    else if (str2_len == 0) {
+    } else if (str2_len == 0) {
         return str1_len;
     }
     size_t M = str1_len + 1;
@@ -46,38 +45,38 @@ int DamerauLevenshtein(std::string str1, std::string str2) {
     int db;
     int levdist;
 
-    int* dist = nullptr;    
-    dist = new int[P];   
+    int* dist = nullptr;
+    dist = new int[P];
 
     // std::unique_ptr<int[]> dist = std::make_unique<int[]>(P);
-    for (i=0; i<P; i++) {
+    for (i = 0; i < P; i++) {
         dist[i] = 0;
     }
     dist[0] = maxdist;
-    for (i=0; i<M; i++) {
-        dist[i*Pn] = maxdist;
-        dist[(i+1)*Pn+1] = i;
+    for (i = 0; i < M; i++) {
+        dist[i * Pn] = maxdist;
+        dist[(i + 1) * Pn + 1] = i;
     }
-    dist[M*Pn] = maxdist;
+    dist[M * Pn] = maxdist;
 
-    for (j=0; j<N; j++) {
+    for (j = 0; j < N; j++) {
         dist[j] = maxdist;
-        dist[Pn+(j+1)] = j;
+        dist[Pn + (j + 1)] = j;
     }
-    dist[Pn+N] = maxdist;
+    dist[Pn + N] = maxdist;
 
-    for (i=0; i<str1_len; i++) {
+    for (i = 0; i < str1_len; i++) {
         da[str1[i]] = 0;
     }
-    for (j=0; j<str2_len; j++) {
+    for (j = 0; j < str2_len; j++) {
         da[str2[j]] = 0;
     }
-    for (i=1; i<M; i++) {
+    for (i = 1; i < M; i++) {
         im = i - 1;
         ip = i + 1;
         // Column of last match on this row: `DB` in pseudocode
         db = 0;
-        for (j=1; j<N; j++) {
+        for (j = 1; j < N; j++) {
             jm = j - 1;
             jp = j + 1;
             k = da[str2[jm]];
@@ -88,17 +87,17 @@ int DamerauLevenshtein(std::string str1, std::string str2) {
             } else {
                 sub_cost = 1;
             }
-            dist[ip*Pn+jp] = min(min(min(
-                dist[i*Pn+j] + sub_cost, 
-                dist[ip*Pn+j]+1), 
-                dist[i*Pn+jp]+1), 
-                dist[k*Pn+l] + (i-k-1) + 1 + (j-l-1));
+            dist[ip * Pn + jp] = min(min(min(
+                                             dist[i * Pn + j] + sub_cost,
+                                             dist[ip * Pn + j] + 1),
+                                         dist[i * Pn + jp] + 1),
+                                     dist[k * Pn + l] + (i - k - 1) + 1 + (j - l - 1));
         }
         // Update last row for current char
         da[str1[im]] = i;
     }
 
-    levdist = dist[M*Pn+N];
+    levdist = dist[M * Pn + N];
 
     delete[] dist;
     dist = nullptr;
@@ -107,7 +106,6 @@ int DamerauLevenshtein(std::string str1, std::string str2) {
 }
 
 int main() {
-
     int num_iterations = 1e6;
 
     std::string str1, str2;
@@ -117,7 +115,7 @@ int main() {
     std::string substring_string;
     double similarity_ratio;
 
-    std::cout << "Enter first string: "; 
+    std::cout << "Enter first string: ";
     std::getline(std::cin, str1);
     str1_len = str1.length();
 
@@ -126,12 +124,12 @@ int main() {
     str2_len = str2.length();
 
     auto begin = std::chrono::high_resolution_clock::now();
-    for (int i=0; i<num_iterations; i++) {
+    for (int i = 0; i < num_iterations; i++) {
         distance = DamerauLevenshtein(str1, str2);
         // std::cout << "Distance: " << distance << std::endl;
     }
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count())/(1e9) << "s" << std::endl;
+    std::cout << double(std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()) / (1e9) << "s" << std::endl;
 
     return EXIT_SUCCESS;
 }
