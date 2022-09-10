@@ -27,6 +27,16 @@ int main() {
     char s[] = "big light in sky slated to upper in east";
 
     // lambda can be used instead of Ftitle operator()
+
+    /* lambda function capture semantic rules (var is the name of a variable):
+     * [var] Capture by value
+     * [&var] Capture by reference
+     * [=] Capture all variables by value
+     * [&] Capture all variables by reference
+     * [&, var] Capture all variables by reference, except capture var by value
+     * [&var, var2] Capture var by reference and var2 by value
+     */
+
     // std::transform(s, s + strnlen(s, maxlen_), s, FTitle());
     std::transform(
         s, s + strnlen(s, maxlen_), s, [&lastc](const char& c) -> char {
