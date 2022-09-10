@@ -35,11 +35,14 @@ int main() {
      * [&] Capture all variables by reference
      * [&, var] Capture all variables by reference, except capture var by value
      * [&var, var2] Capture var by reference and var2 by value
+
+     The limitation of capture by value can be overrode by providing mutable
+     after function parameters, however this modifier is not recommended
      */
 
     // std::transform(s, s + strnlen(s, maxlen_), s, FTitle());
     std::transform(
-        s, s + strnlen(s, maxlen_), s, [&lastc](const char& c) -> char {
+        s, s + strnlen(s, maxlen_), s, [=, &lastc](const char& c) -> char {
             const char r =
                 (lastc == ' ' || lastc == 0) ? toupper(c) : tolower(c);
             lastc = c;
