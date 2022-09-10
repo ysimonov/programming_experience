@@ -5,34 +5,90 @@
 
 // Simple demonstration class to operate on rational numbers
 class Rational {
-    int _n = 0;
-    int _d = 1;
+    int n_ = 0;
+    int d_ = 1;
 
    public:
     // A constructor with default value (default constructor)
     Rational(int numerator = 0, int denomenator = 1)
-        : _n(numerator), _d(denomenator){};
+        : n_(numerator), d_(denomenator){};
 
     // Copy constructor
     // Simply copies the values from another rational object
-    Rational(const Rational &rhs)
-        : _n(rhs._n), _d(rhs._d){};
+    Rational(const Rational &rhs) : n_(rhs.n_), d_(rhs.d_) {
+        std::cout << "Copy constructor was called" << std::endl;
+    };
+    Rational(Rational &&) noexcept;
     ~Rational();
 
-    // Getter functions
-    int numerator() const {
-        return _n;
-    };
-    int denomenator() const {
-        return _d;
-    };
+    void reset();
 
-    // Operator overloads
-    Rational &operator=(const Rational &);
+    // Getter functions
+    inline int numerator() const { return n_; };
+    inline int denomenator() const { return d_; };
 
     // This handles strings
     operator std::string() const;
+
+    // Copy operator
+    Rational &operator=(const Rational &);
+
+    // Move operator
+    Rational &operator=(Rational &&) noexcept;
 };
+
+// Resets values to the original state
+void Rational::reset() {
+    n_ = 0;
+    d_ = 1;
+}
+
+// Move constructor
+Rational::Rational(Rational &&rhs) noexcept {
+    std::cout << "Move constructor was called" << std::endl;
+    n_ = std::move(rhs.n_);
+    d_ = std::move(rhs.d_);
+    rhs.reset();
+}
+
+// Object destructor
+Rational::~Rational() { reset(); }
+
+// this is an example of the non-member operator overloading
+Rational operator+(const Rational &lhs, const Rational &rhs) {
+    return Rational((lhs.numerator() * rhs.denomenator()) +
+                        (lhs.denomenator() * rhs.numerator()),
+                    lhs.denomenator() * rhs.denomenator());
+}
+
+Rational operator-(const Rational &lhs, const Rational &rhs) {
+    return Rational((lhs.numerator() * rhs.denomenator()) -
+                        (lhs.denomenator() * rhs.numerator()),
+                    lhs.denomenator() * rhs.denomenator());
+}
+
+Rational operator*(const Rational &lhs, const Rational &rhs) {
+    return Rational(lhs.numerator() * rhs.numerator(),
+                    lhs.denomenator() * rhs.denomenator());
+}
+
+Rational operator/(const Rational &lhs, const Rational &rhs) {
+    return Rational(lhs.numerator() * rhs.denomenator(),
+                    lhs.denomenator() * rhs.numerator());
+}
+
+Rational::operator std::string() const {
+    if (d_ == 1) {
+        return std::to_string(n_);
+    } else {
+        return std::to_string(n_) + "/" + std::to_string(d_);
+    }
+}
+
+// overloading the left shift operator
+std::ostream &operator<<(std::ostream &o, const Rational &r) {
+    return o << std::string(r);
+}
 
 // Returns a reference to itself
 // This is accomplished by using *this
@@ -40,48 +96,23 @@ Rational &Rational::operator=(const Rational &rhs) {
     // check if copying from the same object or not
     // this is the pointer to this object, and
     // &rhs is the reference to the object on rhs
+    std::cout << "Assignment operator was called " << std::endl;
     if (this != &rhs) {
-        _n = rhs.numerator();
-        _d = rhs.denomenator();
+        n_ = rhs.numerator();
+        d_ = rhs.denomenator();
     }
     return *this;
 }
 
-// this is an example of the non-member operator overloading
-Rational operator+(const Rational &lhs, const Rational &rhs) {
-    return Rational((lhs.numerator() * rhs.denomenator()) + (lhs.denomenator() * rhs.numerator()),
-                    lhs.denomenator() * rhs.denomenator());
-}
-
-Rational operator-(const Rational &lhs, const Rational &rhs) {
-    return Rational((lhs.numerator() * rhs.denomenator()) - (lhs.denomenator() * rhs.numerator()),
-                    lhs.denomenator() * rhs.denomenator());
-}
-
-Rational operator*(const Rational &lhs, const Rational &rhs) {
-    return Rational(lhs.numerator() * rhs.numerator(), lhs.denomenator() * rhs.denomenator());
-}
-
-Rational operator/(const Rational &lhs, const Rational &rhs) {
-    return Rational(lhs.numerator() * rhs.denomenator(), lhs.denomenator() * rhs.numerator());
-}
-
-Rational::operator std::string() const {
-    if (_d == 1) {
-        return std::to_string(_n);
-    } else {
-        return std::to_string(_n) + "/" + std::to_string(_d);
+// Moves reference from rhs to lhs
+Rational &Rational::operator=(Rational &&rhs) noexcept {
+    std::cout << "Move assignment operator was called " << std::endl;
+    if (this != &rhs) {
+        n_ = std::move(rhs.n_);
+        d_ = std::move(rhs.d_);
+        rhs.reset();
     }
-}
-
-Rational::~Rational() {
-    _n = 0;
-    _d = 1;
-}
-
-// overloading the left shift operator
-std::ostream &operator<<(std::ostream &o, const Rational &r) {
-    return o << std::string(r);
+    return *this;
 }
 
 int main() {
@@ -127,6 +158,19 @@ int main() {
     std::string s = "Rational value is: ";
     s += b;
     std::cout << s << std::endl;
+
+    // copy
+    Rational f = c;
+
+    // move
+    Rational g = std::move(c);
+
+    std::cout << "Value of c: " << c << std::endl;
+    std::cout << "Value of f after copying c: " << f << std::endl;
+    std::cout << "Value of g after moving ref of c into f: " << g << std::endl;
+    std::cout << "Value of c after moving ref into g: " << c << std::endl;
+
+    c = std::move(g);
 
     return 0;
 }
