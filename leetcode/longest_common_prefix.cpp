@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -34,14 +35,13 @@ class Solution {
         }
         // find the length of the shortest string in the vector
         vector<int> lengths;
-        int min_length = INT_MAX;
+        int min_length = numeric_limits<int>::min();
         const string &str0 = strs[0];
         char ch = str0.at(0);
         // check min length and
         for (auto &str : strs) {
             auto strl = str.length();
-            if (strl == 0)
-                return "";
+            if (strl == 0) return "";
             if (strl < min_length) {
                 min_length = strl;
             }
