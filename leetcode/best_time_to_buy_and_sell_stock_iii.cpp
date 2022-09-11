@@ -19,10 +19,10 @@ class Solution {
         vector<int>* previous_transaction_profits = nullptr;
 
         // number of transcations
-        int k = 1;
+        int k = 2;
 
         // populate dynamic array
-        for (int t = 0; t < k + 1; ++t) {
+        for (int t = 1; t < k + 1; ++t) {
             int max_profit = numeric_limits<int>::min();
 
             if (t % 2 == 1) {
