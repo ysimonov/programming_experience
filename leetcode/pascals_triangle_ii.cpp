@@ -19,7 +19,7 @@ class Solution {
         int M = N / 2;
 
         for (int i = 1; i < M; ++i) {
-            int nCi = round(nCk * ((double)(rowIndex + 1 - i)) / i);
+            int nCi = (int)((size_t)nCk * (rowIndex + 1 - i) / i);
             result.emplace_back(nCi);
             nCk = nCi;
         }
@@ -27,7 +27,7 @@ class Solution {
         auto complete = result;
 
         if (rowIndex % 2 == 0) {
-            int nCi = round(nCk * ((double)(rowIndex + 1 - M) / M));
+            int nCi = int((size_t)nCk * (rowIndex + 1 - M) / M);
             result.emplace_back(nCi);
         }
 
