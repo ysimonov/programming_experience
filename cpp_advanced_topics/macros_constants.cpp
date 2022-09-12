@@ -1,4 +1,12 @@
+
+/*
+Preprocessor replaces include directive with the contents of the
+corresponding header file(s). Then passed to a compiler, multiple
+header files form a translation unit.
+*/
 #include <cstdio>
+
+#include "conditional.h"
 
 // Not recommended in C++ (no type, simply used as string replacement)
 // #define ONE 1
