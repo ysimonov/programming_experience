@@ -22,6 +22,9 @@ void shopper(std::atomic<unsigned int>* garlic_count,
 
 int main() {
     // can use atomic instead of global
+    // note that atomic doesn't require lock
+    // since information is synchronized across threads
+    // this is just for demostration purposes
     std::atomic<unsigned int> garlic_count(0);
 
     std::thread barron(&shopper, &garlic_count, "Barron");
@@ -30,7 +33,8 @@ int main() {
     barron.join();
     olivia.join();
 
-    std::cout << "Total number of garlic(s): " << garlic_count << std::endl;
+    std::cout << "Total number of garlic(s): " << garlic_count.load()
+              << std::endl;
 
     return 0;
 }
