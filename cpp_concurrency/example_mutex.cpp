@@ -1,4 +1,5 @@
 #include <atomic>
+#include <chrono>
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -6,20 +7,25 @@
 // unsigned int garlic_count = 0;
 std::mutex pensil;
 
-void shopper(std::atomic<unsigned int>* garlic_count) {
-    pensil.lock();
-    for (int i = 0; i < 1000000; i++) {
+void shopper(std::atomic<unsigned int>* garlic_count,
+             const char* shopper_name) {
+    for (int i = 0; i < 5; i++) {
+        std::cout << "Shopper " << shopper_name << " is thinking ...\n";
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        pensil.lock();
         *garlic_count += 1;
+        pensil.unlock();
     }
-    pensil.unlock();
 }
 
 int main() {
     // can use atomic instead of global
     std::atomic<unsigned int> garlic_count(0);
 
-    std::thread barron(&shopper, &garlic_count);
-    std::thread olivia(&shopper, &garlic_count);
+    std::thread barron(&shopper, &garlic_count, "Barron");
+    std::thread olivia(&shopper, &garlic_count, "Olivia");
 
     barron.join();
     olivia.join();
