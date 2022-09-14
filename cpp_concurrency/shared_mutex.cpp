@@ -1,3 +1,4 @@
+#include <atomic>
 #include <chrono>
 #include <iostream>
 #include <shared_mutex>
@@ -12,11 +13,11 @@
 std::string WEEKDAYS[] = {"Monday", "Tuesday",  "Wednesday", "Thursday",
                           "Friday", "Saturday", "Sunday"};
 
-int today = 0;
-std::shared_mutex marker;
+std::atomic<int> today(0);
+std::shared_timed_mutex marker;
 
 void calendar_reader(const int id) {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 20; i++) {
         marker.lock_shared();
         std::cout << "Reader " << id << " sees today is " << WEEKDAYS[today]
                   << std::endl;
@@ -26,10 +27,10 @@ void calendar_reader(const int id) {
 }
 
 void calendar_writer(const int id) {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 20; i++) {
         marker.lock();
         today = (today + 1) % 7;
-        std::cout << "Writed " << id << " updated date to " << WEEKDAYS[today]
+        std::cout << "Writer " << id << " updated date to " << WEEKDAYS[today]
                   << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         marker.unlock();
