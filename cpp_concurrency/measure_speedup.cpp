@@ -2,6 +2,31 @@
 #include <future>
 #include <iostream>
 
+// ***Throughput***
+// is a measure of how many units of information a system can process in a given
+// amount of time
+
+// ***Latency***
+// delay between invoking the operation and getting the response
+
+// ***Amdahl's Law***
+// Speedup(latency) = 1 / ((1 - p) + p / s)
+// p - proportion of execution time that the part benefiting from
+// improved resources originally occupied
+// s - speedup of the part of the task that benefits from improved system
+// resources
+
+// ***Strong scaling***
+// is defined as how the solution time varies with the number of processors for
+// a fixed total problem size
+
+// ***Weak scaling***
+// is defined as how the solution time varies with the number of processors for
+// a fixed problem size per processor
+
+// ***Efficiency***
+// how well the parallel processing resources are being utilized
+
 const int NUM_EVAL_RUNS = 10;
 const int SUM_VALUE = 100000000;
 
