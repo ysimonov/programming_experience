@@ -1,35 +1,59 @@
 /**
  * Challenge: Multiply two matrices
  */
+#include <boost/asio.hpp>
 #include <cmath>
 #include <cstdio>
 #include <iostream>
+#include <mutex>
 #include <new>  // nothrow
 #include <stdexcept>
 #include <string>
 #include <thread>
 
+std::recursive_mutex mutex_;
+
+// g++ matrix_product.cpp -lboost_thread -lboost_system
+
 /* sequential implementation of matrix multiply */
-void sequential_matrix_multiply(long **A, size_t num_rows_a, size_t num_cols_a,
-                                long **B, size_t num_rows_b, size_t num_cols_b,
-                                long **C) {
-    for (size_t i = 0; i < num_rows_a; i++) {
-        for (size_t j = 0; j < num_cols_b; j++) {
-            C[i][j] = 0;  // initialize result cell to zero
-            for (size_t k = 0; k < num_cols_a; k++) {
-                C[i][j] += A[i][k] * B[k][j];
+template <typename T>
+void sequential_matrix_multiply(T ***A, size_t num_rows_a, size_t num_cols_a,
+                                T ***B, size_t num_rows_b, size_t num_cols_b,
+                                T ***C) {
+    for (size_t i = 0; i < num_rows_a; ++i) {
+        for (size_t j = 0; j < num_cols_b; ++j) {
+            (*C)[i][j] = 0;  // initialize result cell to zero
+            for (size_t k = 0; k < num_cols_a; ++k) {
+                (*C)[i][j] += (*A)[i][k] * (*B)[k][j];
             }
         }
     }
 }
 
+/* helper function for parallel implementation of matrix multiplication */
+template <typename T>
+void quick_sum(T *Aik, T *Bkj, T *Cij) {
+    // critical section
+    std::unique_lock<std::recursive_mutex> lock(mutex_);
+    (*Cij) += (*Aik) * (*Bkj);
+}
+
 /* parallel implementation of matrix multiply */
-void parallel_matrix_multiply(long **A, size_t num_rows_a, size_t num_cols_a,
-                              long **B, size_t num_rows_b, size_t num_cols_b,
-                              long **C) {
-    /***********************
-     * YOUR CODE GOES HERE *
-     ***********************/
+template <typename T>
+void parallel_matrix_multiply(T ***A, size_t num_rows_a, size_t num_cols_a,
+                              T ***B, size_t num_rows_b, size_t num_cols_b,
+                              T ***C) {
+    boost::asio::thread_pool pool(std::thread::hardware_concurrency());
+    for (size_t i = 0; i < num_rows_a; ++i) {
+        for (size_t j = 0; j < num_cols_b; ++j) {
+            (*C)[i][j] = 0;  // initialize result cell to zero
+            // TODO partition matrix product into chunks
+            // Cij = SUM OVER k(Aik * Bkj)
+            // Cijk = Aik * Bkj becomes a tensor product
+            // Then contract tensor Cij = SUM OVER k(Cijk) ???
+            // Not really space efficient ...
+        }
+    }
 }
 
 // allocates rows and cols in a matrix
@@ -75,7 +99,7 @@ void deallocate_matrix(T ***mat, size_t rows, size_t cols) {
         (*mat)[i] = nullptr;
     }
     delete[](*mat);
-    *mat = nullptr;
+    (*mat) = nullptr;
 }
 
 // intialize matrix with values in range 1 to 100
@@ -139,12 +163,12 @@ int main() {
     // ***** Computation *****
     printf("Evaluating Sequential Implementation...\n");
     std::chrono::duration<double> sequential_time(0);
-    sequential_matrix_multiply(A, NUM_ROWS_A, NUM_COLS_A, B, NUM_ROWS_B,
-                               NUM_COLS_B, sequential_result);  // "warm up"
+    sequential_matrix_multiply(&A, NUM_ROWS_A, NUM_COLS_A, &B, NUM_ROWS_B,
+                               NUM_COLS_B, &sequential_result);  // "warm up"
     for (int i = 0; i < NUM_EVAL_RUNS; i++) {
         auto startTime = std::chrono::high_resolution_clock::now();
-        sequential_matrix_multiply(A, NUM_ROWS_A, NUM_COLS_A, B, NUM_ROWS_B,
-                                   NUM_COLS_B, sequential_result);
+        sequential_matrix_multiply(&A, NUM_ROWS_A, NUM_COLS_A, &B, NUM_ROWS_B,
+                                   NUM_COLS_B, &sequential_result);
         sequential_time +=
             std::chrono::high_resolution_clock::now() - startTime;
     }
@@ -152,12 +176,12 @@ int main() {
 
     printf("Evaluating Parallel Implementation...\n");
     std::chrono::duration<double> parallel_time(0);
-    parallel_matrix_multiply(A, NUM_ROWS_A, NUM_COLS_A, B, NUM_ROWS_B,
-                             NUM_COLS_B, parallel_result);  // "warm up"
+    parallel_matrix_multiply(&A, NUM_ROWS_A, NUM_COLS_A, &B, NUM_ROWS_B,
+                             NUM_COLS_B, &parallel_result);  // "warm up"
     for (int i = 0; i < NUM_EVAL_RUNS; i++) {
         auto startTime = std::chrono::high_resolution_clock::now();
-        parallel_matrix_multiply(A, NUM_ROWS_A, NUM_COLS_A, B, NUM_ROWS_B,
-                                 NUM_COLS_B, parallel_result);
+        parallel_matrix_multiply(&A, NUM_ROWS_A, NUM_COLS_A, &B, NUM_ROWS_B,
+                                 NUM_COLS_B, &parallel_result);
         parallel_time += std::chrono::high_resolution_clock::now() - startTime;
     }
     parallel_time /= NUM_EVAL_RUNS;
