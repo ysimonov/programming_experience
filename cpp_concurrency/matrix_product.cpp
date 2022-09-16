@@ -36,29 +36,29 @@ void parallel_matrix_multiply(long **A, size_t num_rows_a, size_t num_cols_a,
 // throws runtime exception if invalid rows or cols is provided,
 // or if allocation space is insufficient to hold all matrix enties
 template <typename T>
-void allocate_matrix(T **mat, const size_t rows, const size_t cols) {
+void allocate_matrix(T ***mat, const size_t rows, const size_t cols) {
     if (rows == 0) {
         throw std::runtime_error("Matrix has invalid rows of size 0!");
     }
     if (cols == 0) {
         throw std::runtime_error("Matrix has invalid cols of size 0!");
     }
-    mat = new (std::nothrow) T *[rows];
-    if (mat == nullptr) {
+    (*mat) = new (std::nothrow) T *[rows];
+    if ((*mat) == nullptr) {
         throw std::runtime_error(
             "Could not allocate space for matrix with dimensions " +
             std::to_string(rows) + " x " + std::to_string(cols));
     } else {
         for (size_t i = 0; i < rows; ++i) {
-            mat[i] = new (std::nothrow) T[cols];
-            if (mat[i] == nullptr) {
+            (*mat)[i] = new (std::nothrow) T[cols];
+            if ((*mat)[i] == nullptr) {
                 // deallocate all elements up until i
                 for (size_t j = 0; j < i; ++j) {
-                    delete[] mat[j];
-                    mat[j] = nullptr;
+                    delete[](*mat)[j];
+                    (*mat)[j] = nullptr;
                 }
-                delete[] mat;
-                mat = nullptr;
+                delete[](*mat);
+                (*mat) = nullptr;
                 throw std::runtime_error(
                     "Could not allocate space for matrix with dimensions " +
                     std::to_string(rows) + " x " + std::to_string(cols));
@@ -69,21 +69,21 @@ void allocate_matrix(T **mat, const size_t rows, const size_t cols) {
 
 // dellocate matrix
 template <typename T>
-void deallocate_matrix(T **mat, size_t rows, size_t cols) {
+void deallocate_matrix(T ***mat, size_t rows, size_t cols) {
     for (size_t i = 0; i < rows; ++i) {
-        delete[] mat[i];
-        mat[i] = nullptr;
+        delete[](*mat)[i];
+        (*mat)[i] = nullptr;
     }
-    delete[] mat;
-    mat = nullptr;
+    delete[](*mat);
+    *mat = nullptr;
 }
 
 // intialize matrix with values in range 1 to 100
 template <typename T>
-void populate_matrix_with_random_values(T **mat, size_t rows, size_t cols) {
+void populate_matrix_with_random_values(T ***mat, size_t rows, size_t cols) {
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            mat[i][j] = (T)(rand() % 100 + 1);
+            (*mat)[i][j] = (T)(rand() % 100 + 1);
         }
     }
 }
@@ -98,41 +98,41 @@ int main() {
     // ***** General Allocations *****
     long **A = nullptr;
     try {
-        allocate_matrix(A, NUM_ROWS_A, NUM_COLS_A);
+        allocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     }
-    populate_matrix_with_random_values(A, NUM_ROWS_A, NUM_COLS_A);
+    populate_matrix_with_random_values(&A, NUM_ROWS_A, NUM_COLS_A);
 
     long **B = nullptr;
     try {
-        allocate_matrix(B, NUM_ROWS_B, NUM_COLS_B);
+        allocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
-        deallocate_matrix(A, NUM_ROWS_A, NUM_COLS_A);
+        deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
         return EXIT_FAILURE;
     }
-    populate_matrix_with_random_values(B, NUM_ROWS_B, NUM_COLS_B);
+    populate_matrix_with_random_values(&B, NUM_ROWS_B, NUM_COLS_B);
 
     long **sequential_result = nullptr;
     try {
-        allocate_matrix(sequential_result, NUM_ROWS_A, NUM_COLS_B);
+        allocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
-        deallocate_matrix(A, NUM_ROWS_A, NUM_COLS_A);
-        deallocate_matrix(B, NUM_ROWS_B, NUM_COLS_B);
+        deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
+        deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
         return EXIT_FAILURE;
     }
 
     long **parallel_result = nullptr;
     try {
-        allocate_matrix(parallel_result, NUM_ROWS_A, NUM_COLS_B);
+        allocate_matrix(&parallel_result, NUM_ROWS_A, NUM_COLS_B);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
-        deallocate_matrix(A, NUM_ROWS_A, NUM_COLS_A);
-        deallocate_matrix(B, NUM_ROWS_B, NUM_COLS_B);
-        deallocate_matrix(sequential_result, NUM_ROWS_A, NUM_COLS_B);
+        deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
+        deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
+        deallocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
         return EXIT_FAILURE;
     }
 
@@ -179,10 +179,10 @@ int main() {
                                       std::thread::hardware_concurrency());
 
     // ***** General Deallocations *****
-    deallocate_matrix(A, NUM_ROWS_A, NUM_COLS_A);
-    deallocate_matrix(B, NUM_ROWS_B, NUM_COLS_B);
-    deallocate_matrix(sequential_result, NUM_ROWS_A, NUM_COLS_B);
-    deallocate_matrix(parallel_result, NUM_ROWS_A, NUM_COLS_B);
+    deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
+    deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
+    deallocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
+    deallocate_matrix(&parallel_result, NUM_ROWS_A, NUM_COLS_B);
 
     return EXIT_SUCCESS;
 }
