@@ -1,26 +1,17 @@
 /**
  * Challenge: Multiply two matrices
  */
-#include <boost/asio.hpp>
-#include <boost/asio/io_service.hpp>
-#include <boost/bind/bind.hpp>
-#include <boost/thread/thread.hpp>
 #include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <iostream>
-#include <mutex>
-#include <new>  // nothrow
-#include <numeric>
+#include <new>      // nothrow
+#include <numeric>  // accumulate
 #include <stdexcept>
 #include <string>
 #include <thread>
 #include <utility>  // pair
 #include <vector>
-
-std::recursive_mutex mutex_;
-
-// g++ matrix_product.cpp -lboost_thread -lboost_system
 
 /* sequential implementation of matrix multiply */
 template <typename T>
@@ -35,14 +26,6 @@ void sequential_matrix_multiply(T ***A, size_t num_rows_a, size_t num_cols_a,
             }
         }
     }
-}
-
-/* helper function for parallel implementation of matrix multiplication */
-template <typename T>
-void quick_sum(T *Aik, T *Bkj, T *Cij) {
-    // critical section
-    std::unique_lock<std::recursive_mutex> lock(mutex_);
-    (*Cij) += (*Aik) * (*Bkj);
 }
 
 /* parallel implementation of matrix multiply */
