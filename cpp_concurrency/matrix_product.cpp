@@ -159,6 +159,7 @@ int main() {
     long **A = nullptr;
     try {
         allocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
+        std::cout << "Allocated space for matrix A" << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
@@ -168,9 +169,11 @@ int main() {
     long **B = nullptr;
     try {
         allocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
+        std::cout << "Allocated space for matrix B" << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
+        std::cout << "Deallocated space for matrix A" << std::endl;
         return EXIT_FAILURE;
     }
     populate_matrix_with_random_values(&B, NUM_ROWS_B, NUM_COLS_B);
@@ -178,21 +181,30 @@ int main() {
     long **sequential_result = nullptr;
     try {
         allocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
+        std::cout << "Allocated space for matrix sequential_result"
+                  << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
         deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
+        std::cout << "Deallocated space for matrix A" << std::endl;
+        std::cout << "Deallocated space for matrix B" << std::endl;
         return EXIT_FAILURE;
     }
 
     long **parallel_result = nullptr;
     try {
         allocate_matrix(&parallel_result, NUM_ROWS_A, NUM_COLS_B);
+        std::cout << "Allocated space for matrix parallel_result" << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         deallocate_matrix(&A, NUM_ROWS_A, NUM_COLS_A);
         deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
         deallocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
+        std::cout << "Deallocated space for matrix A" << std::endl;
+        std::cout << "Deallocated space for matrix B" << std::endl;
+        std::cout << "Deallocated space for matrix sequential_result"
+                  << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -246,6 +258,11 @@ int main() {
     deallocate_matrix(&B, NUM_ROWS_B, NUM_COLS_B);
     deallocate_matrix(&sequential_result, NUM_ROWS_A, NUM_COLS_B);
     deallocate_matrix(&parallel_result, NUM_ROWS_A, NUM_COLS_B);
+
+    std::cout << "Deallocated space for matrix A" << std::endl;
+    std::cout << "Deallocated space for matrix B" << std::endl;
+    std::cout << "Deallocated space for matrix sequential_result" << std::endl;
+    std::cout << "Deallocated space for matrix parallel_result" << std::endl;
 
     return EXIT_SUCCESS;
 }
