@@ -6,6 +6,9 @@
 #include <future>
 #include <thread>
 
+static auto DEFAULT_RECURSION_DEPTH =
+    static_cast<uint16_t>(floor(log2(std::thread::hardware_concurrency())));
+
 /* declaration of merge helper function */
 void merge(int* array, unsigned int left, unsigned int mid, unsigned int right);
 
@@ -25,7 +28,9 @@ void parallel_merge_sort(int* array, unsigned int left, unsigned int right,
     if (left < right) {
         unsigned int mid = (left + right) / 2;  // find the middle point
 
-        if (recursion_depth > 3) {  // sequential
+        // regarding recursion depth discussion, see
+        // https://cs.stackexchange.com/questions/109378/proving-recursion-depth-of-merge-sort
+        if (recursion_depth > DEFAULT_RECURSION_DEPTH) {  // sequential
             sequential_merge_sort(array, left, right);
         } else {  // parallel
 
