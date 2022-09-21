@@ -1,4 +1,5 @@
 #include <pcl/console/time.h>  // TicToc
+#include <pcl/filters/filter.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/point_types.h>
@@ -13,7 +14,8 @@
 #include <string>
 #include <thread>
 
-bool next_iteration = false;  // false;
+int start_data_row = 13;
+bool next_iteration = true;
 
 void print4x4Matrix(const Eigen::Matrix4d& matrix) {
     printf("\nRotation matrix :\n");
@@ -75,15 +77,26 @@ int main(int argc, char* argv[]) {
     time.tic();
 
     pcl::PLYReader Reader;
-    auto read_status = Reader.read(std::string(argv[1]), *cloud_in);
+    auto read_status =
+        Reader.read(std::string(argv[1]), *cloud_in, start_data_row);
 
-    if (read_status < 0) {
+    if (read_status < 0) {  //(pcl::io::loadPLYFile(argv[1], *cloud_in) < 0) {
         PCL_ERROR("Error loading cloud %s.\n", argv[1]);
         return -1;
+    } else {
+        std::cout << "\nLoaded file " << argv[1] << " (" << cloud_in->size()
+                  << " points) in " << std::to_string(time.toc()) << " ms\n"
+                  << std::endl;
     }
-    std::cout << "\nLoaded file " << argv[1] << " (" << cloud_in->size()
-              << " points) in " << std::to_string(time.toc()) << " ms\n"
-              << std::endl;
+
+    // remove nan values (if any)
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_tmp(
+        new pcl::PointCloud<pcl::PointXYZ>);
+
+    pcl::Indices indices;
+    pcl::removeNaNFromPointCloud(*cloud_in, *cloud_tmp, indices);
+    *cloud_in = *cloud_tmp;
+    cloud_tmp.reset();
 
     // matrix of homogeneous transformation (4x4)
     Eigen::Matrix4d transformation_matrix = Eigen::Matrix4d::Identity();
@@ -95,8 +108,14 @@ int main(int argc, char* argv[]) {
     transformation_matrix(1, 0) = std::sin(theta);
     transformation_matrix(1, 1) = std::cos(theta);
 
-    // A translation on z axis (0.4 meters)
-    transformation_matrix(2, 3) = 0.1;  // 4;
+    // A translation on x axis
+    transformation_matrix(0, 3) = 0.1;
+
+    // A translation on y axis
+    transformation_matrix(1, 3) = -0.1;
+
+    // A translation on z axis
+    transformation_matrix(2, 3) = 0.1;
 
     // Display the transformation matrix
     std::cout << "Applying the rigid transformation to cloud_in -> cloud_icp"
@@ -107,34 +126,42 @@ int main(int argc, char* argv[]) {
     pcl::transformPointCloud(*cloud_in, *cloud_icp, transformation_matrix);
     *cloud_tr = *cloud_icp;
 
+    // std::cout << "First 10 points of cloud_in:\n";
+    // for (int i = 0; i < 10; ++i) {
+    //     printf("%.3f ", cloud_in->points[i].x);
+    //     printf("%.3f ", cloud_in->points[i].y);
+    //     printf("%.3f\n", cloud_in->points[i].z);
+    // }
+
+    // std::cout << "\nFirst 10 points of cloud_tr:\n";
+    // for (int i = 0; i < 10; ++i) {
+    //     printf("%.3f ", cloud_tr->points[i].x);
+    //     printf("%.3f ", cloud_tr->points[i].y);
+    //     printf("%.3f\n", cloud_tr->points[i].z);
+    // }
+
+    // std::cout << "\nFirst 10 points of cloud_icp:\n";
+    // for (int i = 0; i < 10; ++i) {
+    //     printf("%.3f ", cloud_icp->points[i].x);
+    //     printf("%.3f ", cloud_icp->points[i].y);
+    //     printf("%.3f\n", cloud_icp->points[i].z);
+    // }
+
+    std::cout << std::endl << std::endl;
+
     // ICP
     pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
 
-    // number of icp iterations
-    icp.setMaximumIterations(iterations);
+    // number of icp iterations (per loop)
+    icp.setMaximumIterations(1);
 
-    // this is the reference point cloud
-    icp.setInputTarget(cloud_in);
+    icp.setMaxCorrespondenceDistance(0.2);
 
     // this is the cloud that needs to be transformed into 'cloud_in'
     icp.setInputSource(cloud_icp);
 
-    time.tic();
-    icp.align(*cloud_icp);
-
-    // set this variable to 1 for the next time .align() is called
-    icp.setMaximumIterations(1);
-
-    std::cout << "Applied " << iterations << " ICP iteration(s) in "
-              << time.toc() << " ms" << std::endl;
-
-    if (icp.hasConverged()) {
-        std::cout << "\nICP has converged, score is " << icp.getFitnessScore()
-                  << std::endl;
-    } else {
-        PCL_ERROR("\nICP has not converged.\n");
-        return -1;
-    }
+    // this is the reference point cloud
+    icp.setInputTarget(cloud_in);
 
     // Visualize results
     pcl::visualization::PCLVisualizer viewer("Iterative Closest Point Demo");
@@ -200,14 +227,11 @@ int main(int argc, char* argv[]) {
     // Keyboard event callback
     viewer.registerKeyboardCallback(&keyboardEventOccurred, (void*)NULL);
 
+    int iteration = 0;
+
     // Display results
     while (!viewer.wasStopped()) {
-        // viewer.spinOnce(10, false);
-        viewer.spin();
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
-        std::cout << "Here" << std::endl;
+        viewer.spinOnce();
 
         // check if the user pressed 'space'
         if (next_iteration) {
@@ -218,10 +242,10 @@ int main(int argc, char* argv[]) {
                       << std::endl;
 
             if (icp.hasConverged()) {
-                printf("\033[11A");  // go up 11 lines in terminal
+                // printf("\033[11A");  // go up 11 lines in terminal
                 printf("\nICP has converged, score is %+.0e\n",
                        icp.getFitnessScore());
-                std::cout << "\nICP transformation " << ++iterations
+                std::cout << "\nICP transformation " << ++iteration
                           << " : cloud_icp -> cloud_in" << std::endl;
 
                 // this is not accurate, for educational purposes only
@@ -231,19 +255,20 @@ int main(int argc, char* argv[]) {
                 print4x4Matrix(transformation_matrix);
 
                 ss.str("");
-                ss << iterations;
+                ss << iteration;
                 std::string iterations_count = "ICP iterations = " + ss.str();
                 viewer.updateText(iterations_count, 10, 60, 16, text_color_norm,
                                   text_color_norm, text_color_norm,
                                   "iterations_count");
                 viewer.updatePointCloud(cloud_icp, cloud_icp_color,
                                         "cloud_icp_v2");
+
             } else {
                 PCL_ERROR("\nICP has not converged.\n");
                 return -1;
             }
+            next_iteration = false;
         }
-        next_iteration = false;
     }
 
     return 0;

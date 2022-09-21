@@ -6,7 +6,7 @@ project(icp)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(PCL 1.8 REQUIRED)
+find_package(PCL 1.5 REQUIRED)
 
 if (PCL_FOUND)
 
