@@ -1,0 +1,8 @@
+- Can create instance of shopping list
+- Can add an item price
+- Can add an item
+- Can calculate the current total price 
+- Can add multiple items and get current total
+- Can add discount rules
+- Can apply discount rules on the total
+- Exception is thrown for item added without a price for the item
